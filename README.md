@@ -106,12 +106,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
 <div align="center">
   <p>Star ⭐ this repository if you find it useful!</p>
   <p>Developed with ❤️ by <a href="https://github.com/yogeshthapa-7">Yogesh Thapa</a></p>

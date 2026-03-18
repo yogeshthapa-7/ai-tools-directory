@@ -24,18 +24,19 @@ export function ToolCard({ tool, bookmarked, onToggleBookmark }: {
       onHoverEnd={() => setIsHovered(false)}
       className="group relative h-full"
     >
-      <Link href={`/tools/${tool.slug}`} className="block h-full">
-        <div
-          className={cn(
-            "relative h-full overflow-hidden rounded-[1.75rem] border transition-all duration-500",
-            "bg-white dark:bg-zinc-900",
-            "border-zinc-200/60 dark:border-zinc-800/60",
-            "shadow-lg shadow-zinc-900/[0.03] dark:shadow-black/20",
-            "hover:shadow-2xl hover:shadow-zinc-900/[0.08] dark:hover:shadow-black/40",
-            "hover:border-indigo-300/50 dark:hover:border-indigo-700/50",
-            "backdrop-blur-sm"
-          )}
-        >
+      <div
+        className={cn(
+          "relative h-full overflow-hidden rounded-[1.75rem] border transition-all duration-500",
+          "bg-white dark:bg-zinc-900",
+          "border-zinc-200/60 dark:border-zinc-800/60",
+          "shadow-lg shadow-zinc-900/[0.03] dark:shadow-black/20",
+          "hover:shadow-2xl hover:shadow-zinc-900/[0.08] dark:hover:shadow-black/40",
+          "hover:border-indigo-300/50 dark:hover:border-indigo-700/50",
+          "backdrop-blur-sm"
+        )}
+      >
+        <Link href={`/tools/${tool.slug}`} className="absolute inset-0 z-10" aria-label={`View details for ${tool.name}`} />
+
           {/* Background Gradient Effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/0 via-purple-500/0 to-pink-500/0 opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-500" />
           
@@ -46,10 +47,10 @@ export function ToolCard({ tool, bookmarked, onToggleBookmark }: {
             transition={{ duration: 0.8, ease: "easeInOut" }}
           />
 
-          <div className="relative p-6 flex flex-col h-full">
+          <div className="relative p-6 flex flex-col h-full z-0">
             {/* Header Section */}
             <div className="flex items-start justify-between mb-5">
-              <div className="relative">
+              <div className="relative z-20">
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -77,7 +78,7 @@ export function ToolCard({ tool, bookmarked, onToggleBookmark }: {
               </div>
               
               {/* Action Buttons */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 relative z-20">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -176,7 +177,6 @@ export function ToolCard({ tool, bookmarked, onToggleBookmark }: {
           {/* Hover Border Glow */}
           <div className="absolute inset-0 rounded-[1.75rem] ring-1 ring-inset ring-indigo-500/0 group-hover:ring-indigo-500/20 dark:group-hover:ring-indigo-400/20 transition-all duration-500" />
         </div>
-      </Link>
     </motion.div>
   );
 }

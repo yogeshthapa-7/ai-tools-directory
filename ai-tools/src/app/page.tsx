@@ -35,29 +35,7 @@ export default function Home() {
     });
   }, [search, selectedCategory, selectedPricing]);
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1,
-      },
-    },
-  };
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 24,
-      }
-    },
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 dark:from-zinc-950 dark:via-slate-900 dark:to-indigo-950/20 text-zinc-900 dark:text-zinc-100 selection:bg-indigo-500/30">
@@ -224,21 +202,34 @@ export default function Home() {
               {filteredTools.length > 0 ? (
                 <motion.div
                   key="tools-grid"
-                  variants={container}
-                  initial="hidden"
-                  animate="show"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"
                 >
-                  {filteredTools.map((tool) => (
-                    <motion.div key={tool.id} variants={item}>
-                      <ToolCard
-                        tool={tool}
-                        bookmarked={bookmarks.includes(tool.id)}
-                        onToggleBookmark={toggleBookmark}
-                      />
-                    </motion.div>
-                  ))}
+                  <AnimatePresence mode="popLayout">
+                    {filteredTools.map((tool, index) => (
+                      <motion.div 
+                        key={tool.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ 
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 30,
+                          opacity: { duration: 0.2 }
+                        }}
+                      >
+                        <ToolCard
+                          tool={tool}
+                          bookmarked={bookmarks.includes(tool.id)}
+                          onToggleBookmark={toggleBookmark}
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </motion.div>
               ) : (
                 <motion.div
