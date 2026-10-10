@@ -4,26 +4,19 @@ import { use, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { 
-  ArrowLeft, 
-  ExternalLink, 
-  Globe, 
-  Tag, 
-  ShieldCheck, 
-  Zap, 
-  Star,
-  Info,
+import {
+  ArrowLeft,
+  ExternalLink,
+  Globe,
+  Tag,
   Check,
   Copy,
   Share2,
   Bookmark,
-  Heart,
   ChevronRight,
-  Sparkles
 } from "lucide-react";
 import { TOOLS } from "@/lib/data";
-import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export default function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -31,10 +24,6 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
   const tool = TOOLS.find((t) => t.slug === slug);
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
 
   if (!tool) {
     notFound();
@@ -59,442 +48,246 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
   };
 
   return (
-    <div className="min-h-screen text-zinc-900 dark:text-zinc-100">
-      {/* Floating Progress Bar */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transform origin-left z-50"
-        style={{ scaleX: scrollYProgress }}
-      />
+    <div className="min-h-screen text-stone-900 dark:text-stone-100 selection:bg-stone-500/30">
+      <main className="mx-auto max-w-6xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
+        <Link
+          href="/directory"
+          className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          Back to Directory
+        </Link>
 
-      {/* Floating Header */}
-      <motion.header 
-        style={{ opacity: headerOpacity }}
-        className="fixed top-0 left-0 right-0 z-40 border-b border-zinc-200/50 dark:border-zinc-800/50 backdrop-blur-xl bg-white/80 dark:bg-zinc-900/80"
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
-              <Link 
-                href="/directory" 
-                className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Directory
-              </Link>
-              <div className="h-5 w-px bg-zinc-300 dark:bg-zinc-700" />
-              <span className="text-sm font-bold truncate max-w-[200px]">{tool.name}</span>
+        <Card radius="xl" className="mt-6 p-8 sm:p-10">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center">
+            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl ring-1 ring-stone-900/5 dark:ring-white/10">
+              <Image src={tool.image} alt={tool.name} fill className="object-cover" />
             </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setBookmarked(!bookmarked)}
-                className={cn(
-                  "transition-colors",
-                  bookmarked && "text-amber-600 dark:text-amber-500"
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-3xl font-semibold tracking-tight text-stone-900 dark:text-white sm:text-4xl">
+                  {tool.name}
+                </h1>
+                {tool.featured && (
+                  <span className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-stone-600 dark:bg-white/10 dark:text-stone-300">
+                    Featured
+                  </span>
                 )}
+              </div>
+              <p className="mt-2 text-lg leading-relaxed text-stone-600 dark:text-stone-300">
+                {tool.shortDescription}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {tool.categories.map((c) => (
+                  <span
+                    key={c}
+                    className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600 dark:bg-white/10 dark:text-stone-300"
+                  >
+                    {c}
+                  </span>
+                ))}
+                <span className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium capitalize text-stone-600 dark:bg-white/10 dark:text-stone-300">
+                  {tool.pricing}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex shrink-0 flex-col gap-2.5 lg:items-end">
+              <a
+                href={tool.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
               >
-                <Bookmark className={cn("h-4 w-4", bookmarked && "fill-current")} />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={handleShare}>
-                <Share2 className="h-4 w-4" />
-              </Button>
+                Visit Website
+                <ExternalLink className="h-4 w-4" />
+              </a>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBookmarked((v) => !v)}
+                  aria-pressed={bookmarked}
+                  aria-label={bookmarked ? "Remove bookmark" : "Bookmark"}
+                  className={cn(
+                    "rounded-md border p-2.5 transition-colors",
+                    bookmarked
+                      ? "border-stone-900 text-stone-900 dark:border-white dark:text-white"
+                      : "border-stone-300 text-stone-500 hover:border-stone-400 hover:text-stone-700 dark:border-white/15 dark:text-stone-400 dark:hover:text-stone-200"
+                  )}
+                >
+                  <Bookmark className={cn("h-4 w-4", bookmarked && "fill-current")} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  aria-label="Share"
+                  className="rounded-md border border-stone-300 p-2.5 text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-700 dark:border-white/15 dark:text-stone-400 dark:hover:text-stone-200"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  aria-label="Copy link"
+                  className="rounded-md border border-stone-300 p-2.5 text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-700 dark:border-white/15 dark:text-stone-400 dark:hover:text-stone-200"
+                >
+                  {copied ? (
+                    <Check className="h-4 w-4 text-stone-900 dark:text-white" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </motion.header>
+        </Card>
 
-      <main className="mx-auto max-w-7xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <motion.div
-          style={{ scale: heroScale }}
-          className="mb-12"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
-          >
-            <Link 
-              href="/directory" 
-              className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors group"
-            >
-              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-              Back to Directory
-            </Link>
-          </motion.div>
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
+            <Card radius="lg" className="p-6 sm:p-8">
+              <h2 className="mb-4 text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
+                About {tool.name}
+              </h2>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                {tool.description}
+              </p>
+            </Card>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="relative rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white via-white to-indigo-50/30 dark:from-zinc-900 dark:via-zinc-900 dark:to-indigo-950/30 p-8 sm:p-12 shadow-2xl shadow-indigo-500/5 overflow-hidden"
-          >
-            {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-transparent rounded-full blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-gradient-to-tr from-blue-500/5 to-transparent rounded-full blur-3xl" />
-            
-            <div className="relative flex flex-col lg:flex-row lg:items-center gap-8">
-              <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="relative h-28 w-28 shrink-0 overflow-hidden rounded-3xl ring-1 ring-zinc-900/5 dark:ring-white/10 shadow-xl"
-              >
-                <Image src={tool.image} alt={tool.name} fill className="object-cover" />
-                {tool.featured && (
-                  <div className="absolute -top-1 -right-1 h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-                    <Star className="h-4 w-4 fill-white text-white" />
-                  </div>
-                )}
-              </motion.div>
-              
-              <div className="flex-1 min-w-0">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                      <h1 className="text-4xl sm:text-5xl font-black tracking-tight bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-600 dark:from-white dark:via-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent mb-2">
-                        {tool.name}
-                      </h1>
-                      {tool.featured && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-lg shadow-amber-500/25">
-                          <Sparkles className="h-3.5 w-3.5" />
-                          Featured Tool
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-xl text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed mb-6">
-                    {tool.shortDescription}
-                  </p>
-                  
-                  {/* Quick Stats */}
-                  <div className="flex flex-wrap items-center gap-6 text-sm">
-                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                      <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                        <ShieldCheck className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-zinc-900 dark:text-white capitalize">{tool.pricing}</p>
-                        <p className="text-xs">Pricing</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                      <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                        <Tag className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-zinc-900 dark:text-white">{tool.categories.length} Categories</p>
-                        <p className="text-xs">Classification</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                      <div className="h-9 w-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                        <Zap className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-zinc-900 dark:text-white">Active</p>
-                        <p className="text-xs">Status</p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Quick Actions */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-col gap-3 shrink-0"
-              >
-                <a href={tool.website} target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full sm:w-auto h-12 px-8 text-base font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/30 active:scale-95 group">
-                    Visit Website
-                    <ExternalLink className="ml-2 h-5 w-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </Button>
-                </a>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setLiked(!liked)}
-                    className={cn(
-                      "h-12 w-12 rounded-xl border-2 transition-all",
-                      liked ? "bg-rose-50 dark:bg-rose-950/20 border-rose-500 text-rose-600 dark:text-rose-500" : "border-zinc-200 dark:border-zinc-800 hover:border-rose-500"
-                    )}
-                  >
-                    <Heart className={cn("h-5 w-5", liked && "fill-current")} />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setBookmarked(!bookmarked)}
-                    className={cn(
-                      "h-12 w-12 rounded-xl border-2 transition-all",
-                      bookmarked ? "bg-amber-50 dark:bg-amber-950/20 border-amber-500 text-amber-600 dark:text-amber-500" : "border-zinc-200 dark:border-zinc-800 hover:border-amber-500"
-                    )}
-                  >
-                    <Bookmark className={cn("h-5 w-5", bookmarked && "fill-current")} />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleCopyLink}
-                    className="h-12 w-12 rounded-xl border-2 border-zinc-200 dark:border-zinc-800 hover:border-indigo-500 transition-all"
-                  >
-                    {copied ? <Check className="h-5 w-5 text-emerald-600" /> : <Copy className="h-5 w-5" />}
-                  </Button>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Description Card */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-8 shadow-lg shadow-zinc-900/5"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
-                  <Info className="h-5 w-5 text-white" />
-                </div>
-                <h2 className="text-2xl font-black tracking-tight">About {tool.name}</h2>
-              </div>
-              <div className="prose prose-lg prose-zinc dark:prose-invert max-w-none">
-                <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
-                  {tool.description}
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Screenshots Gallery */}
             {tool.screenshots && tool.screenshots.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-8 shadow-lg shadow-zinc-900/5"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/25">
-                    <Zap className="h-5 w-5 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-black tracking-tight">Screenshots</h2>
-                </div>
-                <div className="grid gap-6 sm:grid-cols-2">
+              <Card radius="lg" className="p-6 sm:p-8">
+                <h2 className="mb-4 text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
+                  Screenshots
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
                   {tool.screenshots.map((s, i) => (
-                    <motion.div 
+                    <div
                       key={i}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.7 + i * 0.1 }}
-                      className="group relative aspect-video overflow-hidden rounded-2xl ring-1 ring-zinc-900/5 dark:ring-white/10 shadow-xl hover:shadow-2xl transition-all"
+                      className="group relative aspect-video overflow-hidden rounded-lg ring-1 ring-stone-900/5 dark:ring-white/10"
                     >
-                      <Image 
-                        src={s} 
-                        alt={`${tool.name} screenshot ${i + 1}`} 
-                        fill 
-                        className="object-cover transition duration-700 group-hover:scale-110" 
+                      <Image
+                        src={s}
+                        alt={`${tool.name} screenshot ${i + 1}`}
+                        fill
+                        className="object-cover transition duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="absolute bottom-4 left-4 text-white font-semibold text-sm">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <div className="absolute bottom-3 left-3 text-sm font-medium text-white">
                           Screenshot {i + 1}
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
-              </motion.div>
+              </Card>
             )}
-
-            {/* Key Features (Mock Data) */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-8 shadow-lg shadow-zinc-900/5"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/25">
-                  <Sparkles className="h-5 w-5 text-white" />
-                </div>
-                <h2 className="text-2xl font-black tracking-tight">Key Features</h2>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {['Easy Integration', 'Fast Performance', 'Secure & Reliable', 'Great Support', '24/7 Uptime', 'Regular Updates'].map((feature, i) => (
-                  <motion.div
-                    key={feature}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.9 + i * 0.05 }}
-                    className="flex items-start gap-3 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors group"
-                  >
-                    <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/25 group-hover:scale-110 transition-transform">
-                      <Check className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="font-semibold text-zinc-900 dark:text-white">{feature}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
           </div>
 
-          {/* Enhanced Sidebar */}
           <div className="space-y-6">
-            {/* Quick Info Card */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-6 shadow-lg shadow-zinc-900/5 sticky top-24"
-            >
-              <h3 className="text-sm font-black uppercase tracking-wider text-zinc-500 mb-6 flex items-center gap-2">
+            <Card radius="lg" className="sticky top-24 p-6">
+              <h3 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
                 <Globe className="h-4 w-4" />
-                Quick Info
+                Details
               </h3>
-              
-              <div className="space-y-4 mb-6">
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
-                      <ShieldCheck className="h-4 w-4" />
-                      Pricing Model
-                    </span>
-                  </div>
-                  <span className="text-lg font-black capitalize bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+              <div className="space-y-3">
+                <div className="rounded-lg bg-stone-50 p-3.5 dark:bg-white/5">
+                  <p className="mb-1 text-xs font-medium text-stone-500 dark:text-stone-400">
+                    Pricing
+                  </p>
+                  <p className="text-sm font-semibold capitalize text-stone-900 dark:text-white">
                     {tool.pricing}
-                  </span>
+                  </p>
                 </div>
-                
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
-                      <Globe className="h-4 w-4" />
-                      Website
-                    </span>
-                  </div>
-                  <a 
+                <div className="rounded-lg bg-stone-50 p-3.5 dark:bg-white/5">
+                  <p className="mb-1 text-xs font-medium text-stone-500 dark:text-stone-400">
+                    Website
+                  </p>
+                  <a
                     href={tool.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline truncate block group"
+                    className="flex items-center gap-1 truncate text-sm font-medium text-stone-900 hover:underline dark:text-white"
                   >
                     {new URL(tool.website).hostname}
-                    <ExternalLink className="inline-block ml-1 h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    <ExternalLink className="h-3 w-3 shrink-0" />
                   </a>
                 </div>
               </div>
-
-              <a href={tool.website} target="_blank" rel="noopener noreferrer" className="block">
-                <Button className="w-full h-12 text-base font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/30 active:scale-95 group">
-                  Get Started
-                  <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
+              <a
+                href={tool.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 flex items-center justify-center gap-1.5 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+              >
+                Get Started
+                <ChevronRight className="h-4 w-4" />
               </a>
-            </motion.div>
+            </Card>
 
-            {/* Categories & Tags Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-6 shadow-lg shadow-zinc-900/5"
-            >
-              <h3 className="text-sm font-black uppercase tracking-wider text-zinc-500 mb-6 flex items-center gap-2">
+            <Card radius="lg" className="p-6">
+              <h3 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
                 <Tag className="h-4 w-4" />
                 Categories & Tags
               </h3>
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs font-bold text-zinc-500 mb-3 uppercase tracking-wider">Categories</p>
-                  <div className="flex flex-wrap gap-2">
-                    {tool.categories.map((c, i) => (
-                      <motion.span 
+                  <p className="mb-2 text-xs font-medium text-stone-500 dark:text-stone-400">
+                    Categories
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tool.categories.map((c) => (
+                      <span
                         key={c}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.7 + i * 0.05 }}
-                        className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-zinc-100 to-zinc-50 dark:from-zinc-800 dark:to-zinc-800/50 text-xs font-bold transition-all hover:scale-105 hover:shadow-md cursor-pointer border border-zinc-200 dark:border-zinc-700"
+                        className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600 dark:bg-white/10 dark:text-stone-300"
                       >
                         {c}
-                      </motion.span>
+                      </span>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-zinc-500 mb-3 uppercase tracking-wider">Tags</p>
-                  <div className="flex flex-wrap gap-2">
-                    {tool.tags.map((t, i) => (
-                      <motion.span 
+                  <p className="mb-2 text-xs font-medium text-stone-500 dark:text-stone-400">
+                    Tags
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tool.tags.map((t) => (
+                      <span
                         key={t}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.8 + i * 0.05 }}
-                        className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500/10 to-purple-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-bold ring-1 ring-inset ring-indigo-500/30 dark:ring-indigo-500/20 hover:scale-105 hover:shadow-md transition-all cursor-pointer"
+                        className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600 dark:bg-white/10 dark:text-stone-300"
                       >
                         #{t}
-                      </motion.span>
+                      </span>
                     ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </Card>
 
-            {/* Share Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7 }}
-              className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white to-indigo-50/30 dark:from-zinc-900 dark:to-indigo-950/30 backdrop-blur-sm p-6 shadow-lg shadow-zinc-900/5"
-            >
-              <h3 className="text-sm font-black uppercase tracking-wider text-zinc-500 mb-4 flex items-center gap-2">
+            <Card radius="lg" className="p-6">
+              <h3 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
                 <Share2 className="h-4 w-4" />
-                Share This Tool
+                Share
               </h3>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-                Found this useful? Share it with your network!
+              <p className="mb-4 text-sm text-stone-600 dark:text-stone-300">
+                Found this useful? Share it with your network.
               </p>
               <div className="flex gap-2">
-                <Button
+                <button
+                  type="button"
                   onClick={handleShare}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 rounded-xl border-2 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-all font-bold"
+                  className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
                 >
-                  <Share2 className="h-4 w-4 mr-2" />
                   Share
-                </Button>
-                <Button
+                </button>
+                <button
+                  type="button"
                   onClick={handleCopyLink}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 rounded-xl border-2 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-all font-bold"
+                  className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
                 >
-                  {copied ? (
-                    <>
-                      <Check className="h-4 w-4 mr-2" />
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy Link
-                    </>
-                  )}
-                </Button>
+                  {copied ? "Copied!" : "Copy Link"}
+                </button>
               </div>
-            </motion.div>
+            </Card>
           </div>
         </div>
       </main>

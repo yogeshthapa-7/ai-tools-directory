@@ -3,6 +3,7 @@ import { ArrowRight, Bookmark, Search, SlidersHorizontal, ShieldCheck, RefreshCw
 import { TOOLS, CATEGORIES } from "@/lib/data";
 import { FadeIn } from "@/components/fade-in";
 import { SnapHeading } from "@/components/snap-heading";
+import { Card } from "@/components/ui/card";
 
 const VALUES = [
   {
@@ -113,9 +114,11 @@ export default function HomePage() {
             {VALUES.map((f) => {
               const Icon = f.icon;
               return (
-                <div
+                <Card
                   key={f.title}
-                  className="rounded-lg border border-stone-200 p-5 dark:border-white/10"
+                  hover
+                  radius="lg"
+                  className="p-5"
                 >
                   <Icon className="h-5 w-5 text-stone-500 dark:text-stone-400" />
                   <h3 className="mt-3 text-base font-medium text-stone-900 dark:text-white">
@@ -124,7 +127,7 @@ export default function HomePage() {
                   <p className="mt-1.5 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                     {f.body}
                   </p>
-                </div>
+                </Card>
               );
             })}
           </div>
@@ -155,29 +158,31 @@ export default function HomePage() {
                 <Link
                   key={tool.id}
                   href={`/tools/${tool.slug}`}
-                  className="group rounded-lg border border-stone-200 p-5 transition-colors hover:border-stone-300 hover:bg-white/60 dark:border-white/10 dark:hover:border-white/20 dark:hover:bg-white/5"
+                  className="group block"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="relative h-10 w-10 overflow-hidden rounded-md ring-1 ring-stone-900/5 dark:ring-white/10">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={tool.image}
-                        alt={tool.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium text-stone-900 dark:text-white">
-                        {tool.name}
-                      </p>
-                      <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
-                        {tool.pricing}
-                      </p>
+                  <Card hover radius="lg" className="p-5">
+                    <div className="flex items-center gap-3">
+                      <span className="relative h-10 w-10 overflow-hidden rounded-md ring-1 ring-stone-900/5 dark:ring-white/10">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={tool.image}
+                          alt={tool.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-stone-900 dark:text-white">
+                          {tool.name}
+                        </p>
+                        <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
+                          {tool.pricing}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                    {tool.shortDescription}
-                  </p>
+                    <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                      {tool.shortDescription}
+                    </p>
+                  </Card>
                 </Link>
               ))}
             </div>

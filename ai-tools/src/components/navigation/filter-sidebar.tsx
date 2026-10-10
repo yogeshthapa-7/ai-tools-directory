@@ -11,6 +11,7 @@ import {
   LayoutGrid,
   Tag,
 } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 function Option({
   label,
@@ -192,9 +193,12 @@ export function FilterSidebar({
       </div>
 
       {!collapsed && (
-        <a
+        <Card
+          as="a"
           href="/submit"
-          className="mt-4 block rounded-lg border border-stone-200 bg-white/80 p-4 transition-colors hover:border-stone-300 hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+          hover
+          radius="lg"
+          className="mt-4 block p-4"
         >
           <p className="text-sm font-medium text-stone-900 dark:text-white">
             Have a tool to share?
@@ -205,7 +209,7 @@ export function FilterSidebar({
           <span className="mt-3 inline-flex items-center rounded-md bg-stone-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200">
             Submit your tool
           </span>
-        </a>
+        </Card>
       )}
     </div>
   );

@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Search, X, SlidersHorizontal, ArrowRight } from "lucide-react";
+import { Search, X, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { FilterSidebar } from "@/components/navigation/filter-sidebar";
 import { ToolCard } from "@/components/tool/ToolCard";
+import { Card } from "@/components/ui/card";
 import { TOOLS, type Pricing } from "@/lib/data";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { cn } from "@/lib/utils";
+
+const TOOLS_PER_PAGE = 10;
 
 export default function DirectoryPage() {
   const [search, setSearch] = useState("");
@@ -14,6 +18,7 @@ export default function DirectoryPage() {
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>("bookmarks", []);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     document.documentElement.classList.add("no-scroll");
@@ -44,10 +49,26 @@ export default function DirectoryPage() {
     });
   }, [search, selectedCategory, selectedPricing]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedCategory, selectedPricing]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTools.length / TOOLS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedTools = useMemo(() => {
+    const start = (safePage - 1) * TOOLS_PER_PAGE;
+    return filteredTools.slice(start, start + TOOLS_PER_PAGE);
+  }, [filteredTools, safePage]);
+
   const clearAll = () => {
     setSearch("");
     setSelectedCategory("All");
     setSelectedPricing("All");
+    setCurrentPage(1);
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.min(Math.max(1, page), totalPages));
   };
 
   return (
@@ -109,7 +130,7 @@ export default function DirectoryPage() {
 
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-stone-600 dark:text-stone-400">
-              {filteredTools.length} of {TOOLS.length} tools
+              Explore all tools
             </p>
             <button
               type="button"
@@ -122,21 +143,70 @@ export default function DirectoryPage() {
           </div>
 
           {filteredTools.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {filteredTools.map((tool) => (
-                <ToolCard
-                  key={tool.id}
-                  tool={tool}
-                  bookmarked={bookmarks.includes(tool.id)}
-                  onToggleBookmark={toggleBookmark}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
-              <div className="rounded-lg border border-stone-200 bg-white p-8 mb-6 dark:border-white/10 dark:bg-stone-950">
-                <Search className="h-10 w-10 text-stone-400 mx-auto" />
+            <>
+              <div className="flex flex-col gap-3">
+                {paginatedTools.map((tool) => (
+                  <ToolCard
+                    key={tool.id}
+                    tool={tool}
+                    bookmarked={bookmarks.includes(tool.id)}
+                    onToggleBookmark={toggleBookmark}
+                  />
+                ))}
               </div>
+
+              {totalPages > 1 && (
+                <nav
+                  className="mt-8 flex items-center justify-center gap-1.5"
+                  aria-label="Pagination"
+                >
+                  <button
+                    type="button"
+                    onClick={() => goToPage(safePage - 1)}
+                    disabled={safePage === 1}
+                    aria-label="Previous page"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-stone-300 text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/15 dark:text-stone-300 dark:hover:bg-white/10 dark:hover:text-white"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        type="button"
+                        onClick={() => goToPage(page)}
+                        aria-label={`Page ${page}`}
+                        aria-current={page === safePage ? "page" : undefined}
+                        className={cn(
+                          "h-9 min-w-9 rounded-md px-2 text-sm transition-all duration-200",
+                          page === safePage
+                            ? "bg-stone-900 font-medium text-white dark:bg-white dark:text-stone-900"
+                            : "text-stone-600 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-white/10 dark:hover:text-white"
+                        )}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => goToPage(safePage + 1)}
+                    disabled={safePage === totalPages}
+                    aria-label="Next page"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-stone-300 text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/15 dark:text-stone-300 dark:hover:bg-white/10 dark:hover:text-white"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </nav>
+              )}
+            </>
+          ) : (
+              <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
+                <Card radius="lg" className="mb-6 p-8">
+                  <Search className="h-10 w-10 text-stone-400 mx-auto" />
+                </Card>
               <h3 className="text-xl font-semibold text-stone-900 dark:text-white mb-2">
                 No tools found
               </h3>
