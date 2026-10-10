@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToolCard } from "@/components/tool/ToolCard";
@@ -10,7 +10,6 @@ import {
   Bookmark,
   Heart,
   Trash2,
-  Download,
   Share2,
   Sparkles,
   TrendingUp,
@@ -63,7 +62,7 @@ export default function BookmarksPage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 dark:from-zinc-950 dark:via-slate-900 dark:to-indigo-950/20">
+    <div className="min-h-screen">
       <main className="mx-auto w-full max-w-7xl px-4 pt-28 pb-20 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -292,7 +291,7 @@ export default function BookmarksPage() {
             </p>
 
             <Link
-              href="/"
+              href="/directory"
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 px-8 py-4 text-base font-black text-white shadow-xl shadow-amber-500/25 hover:shadow-2xl hover:shadow-amber-500/30 transition-all hover:scale-105"
             >
               <Sparkles className="h-5 w-5" />
@@ -325,12 +324,6 @@ export default function BookmarksPage() {
           </motion.div>
         )}
       </main>
-
-      {/* Background */}
-      <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
-        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-amber-500/5 blur-[120px] dark:bg-amber-500/10" />
-        <div className="absolute -bottom-[30%] -right-[10%] h-[1000px] w-[1000px] rounded-full bg-orange-500/5 blur-[120px] dark:bg-orange-500/10" />
-      </div>
     </div>
   );
 }

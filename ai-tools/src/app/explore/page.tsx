@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiltersBar } from "@/components/filters/FiltersBar";
 import { ToolCard } from "@/components/tool/ToolCard";
@@ -104,7 +104,7 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 dark:from-zinc-950 dark:via-slate-900 dark:to-indigo-950/20">
+    <div className="min-h-screen">
       <main className="mx-auto w-full max-w-7xl px-4 pt-28 pb-20 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -360,12 +360,6 @@ export default function ExplorePage() {
           </>
         )}
       </AnimatePresence>
-
-      {/* Background */}
-      <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
-        <div className="absolute -top-[30%] -left-[10%] h-[1000px] w-[1000px] rounded-full bg-indigo-500/5 blur-[120px] dark:bg-indigo-500/10" />
-        <div className="absolute top-[20%] -right-[5%] h-[600px] w-[600px] rounded-full bg-purple-500/5 blur-[100px] dark:bg-purple-500/10" />
-      </div>
     </div>
   );
 }

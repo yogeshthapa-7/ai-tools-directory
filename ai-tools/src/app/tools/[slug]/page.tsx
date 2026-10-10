@@ -20,10 +20,7 @@ import {
   Bookmark,
   Heart,
   ChevronRight,
-  Sparkles,
-  TrendingUp,
-  Users,
-  Clock
+  Sparkles
 } from "lucide-react";
 import { TOOLS } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -62,7 +59,7 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 dark:from-zinc-950 dark:via-slate-900 dark:to-indigo-950/20 text-zinc-900 dark:text-zinc-100">
+    <div className="min-h-screen text-zinc-900 dark:text-zinc-100">
       {/* Floating Progress Bar */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transform origin-left z-50"
@@ -78,7 +75,7 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Link 
-                href="/" 
+                href="/directory" 
                 className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -119,7 +116,7 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
             className="mb-6"
           >
             <Link 
-              href="/" 
+              href="/directory" 
               className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors group"
             >
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />

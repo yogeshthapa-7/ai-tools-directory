@@ -5,16 +5,13 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CATEGORIES, TAGS } from "@/lib/data";
 import {
-  Upload,
   Link as LinkIcon,
   FileText,
   Tag,
-  DollarSign,
   Sparkles,
   CheckCircle,
   AlertCircle,
   Loader2,
-  ImageIcon,
   ArrowRight,
   TrendingUp
 } from "lucide-react";
@@ -67,7 +64,7 @@ export default function SubmitPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 dark:from-zinc-950 dark:via-slate-900 dark:to-indigo-950/20">
+    <div className="min-h-screen">
       <main className="mx-auto w-full max-w-4xl px-4 pt-32 pb-20 sm:px-6">
         {/* Header */}
         <motion.div
@@ -360,12 +357,6 @@ export default function SubmitPage() {
           ))}
         </motion.div>
       </main>
-
-      {/* Background */}
-      <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
-        <div className="absolute top-[10%] -left-[5%] h-[600px] w-[600px] rounded-full bg-indigo-500/5 blur-[100px] dark:bg-indigo-500/10" />
-        <div className="absolute -bottom-[20%] -right-[10%] h-[800px] w-[800px] rounded-full bg-purple-500/5 blur-[120px] dark:bg-purple-500/10" />
-      </div>
     </div>
   );
 }

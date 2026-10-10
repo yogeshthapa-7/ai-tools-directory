@@ -24,7 +24,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ...props
   }, ref) => {
     // Omit motion props from props to avoid type mismatch with motion.button
-    const { onDrag, onDragStart, onDragEnd, onAnimationStart, ...buttonProps } = props as any;
+    const { onDrag: _onDrag, onDragStart: _onDragStart, onDragEnd: _onDragEnd, onAnimationStart: _onAnimationStart, ...buttonProps } = props as Record<string, unknown>;
     const baseStyles = cn(
       "inline-flex items-center justify-center gap-2 font-bold transition-all duration-300",
       "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
