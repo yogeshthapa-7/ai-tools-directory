@@ -22,7 +22,7 @@ export function NavigationBar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-stone-900/[0.06] bg-white/70 backdrop-blur-md dark:border-white/[0.06] dark:bg-black/50">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-stone-900/[0.06] bg-white dark:bg-stone-950">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 sm:px-6 lg:px-8">
           <Link href="/home" className="flex items-center gap-2.5">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-stone-900 dark:bg-white">

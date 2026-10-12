@@ -8,22 +8,31 @@ export function FadeIn({
   delay = 0,
   className,
   retrigger = true,
+  depth = 0,
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
   retrigger?: boolean;
+  depth?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const retriggerRef = useRef(retrigger);
+  retriggerRef.current = retrigger;
+  const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          setVisible(entry.isIntersecting);
+          setVisible((prev) => {
+            if (!retriggerRef.current && prev) return prev;
+            return entry.isIntersecting;
+          });
         });
       },
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
@@ -32,31 +41,20 @@ export function FadeIn({
     return () => observer.disconnect();
   }, []);
 
-  if (!retrigger) {
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "transition-all duration-700 ease-out",
-          visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
-          className
-        )}
-        style={{ transitionDelay: `${delay * 1000}ms` }}
-      >
-        {children}
-      </div>
-    );
-  }
+  const isHidden = mounted && !visible;
 
   return (
     <div
       ref={ref}
       className={cn(
-        "transition-all duration-700 ease-out",
-        visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+        "transition-[transform,opacity] duration-700 ease-out",
+        isHidden ? "opacity-0" : "opacity-100",
         className
       )}
-      style={{ transitionDelay: `${delay * 1000}ms` }}
+      style={{
+        transitionDelay: `${delay * 1000}ms`,
+        transform: `translateZ(${depth}px) translateY(${isHidden ? "24px" : "0"})`,
+      }}
     >
       {children}
     </div>

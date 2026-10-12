@@ -1,42 +1,13 @@
 import Link from "next/link";
-import { ArrowRight, Bookmark, Search, SlidersHorizontal, ShieldCheck, RefreshCw } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { TOOLS, CATEGORIES } from "@/lib/data";
 import { FadeIn } from "@/components/fade-in";
 import { SnapHeading } from "@/components/snap-heading";
 import { Card } from "@/components/ui/card";
-
-const VALUES = [
-  {
-    icon: Search,
-    title: "Search that works",
-    body: "Type a name, a description, or a tag and the directory narrows as you type. No separate search page, no waiting for results — what matches is always in front of you.",
-  },
-  {
-    icon: SlidersHorizontal,
-    title: "Honest categories",
-    body: "Every tool is filed under a real category and marked free, freemium, or paid. You can filter by what a tool does and what it costs before you ever open it.",
-  },
-  {
-    icon: Bookmark,
-    title: "Your own shortlist",
-    body: "Bookmark tools as you browse and find them again on the Bookmarks page. Your list lives in your browser — no account, no sign-up, no tracking.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "No sponsored placements",
-    body: "Nothing here is paid for. Tools are listed because they are useful, in the order that makes sense for you, not for whoever paid the most.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Kept up to date",
-    body: "Listings are reviewed and refreshed so broken links and abandoned projects get flagged. What you see is what you can actually use today.",
-  },
-  {
-    icon: ArrowRight,
-    title: "Submit your own",
-    body: "Built something? Add it to the directory for free. Submissions are read by a person and go live once they fit the directory's standards.",
-  },
-];
+import { AboutSelector } from "@/components/about-selector";
+import { FeaturesRow } from "@/components/features-row";
+import { AuthSection } from "@/components/auth-section";
 
 export const metadata = {
   title: "AI Forge — A calm directory of AI tools",
@@ -45,23 +16,74 @@ export const metadata = {
 };
 
 export default function HomePage() {
-  const featured = TOOLS.filter((t) => t.featured).slice(0, 3);
+  const hero = TOOLS.find((t) => t.slug === "chatgpt") ?? TOOLS[0];
+  const hero_background = "/images/ai-background.png"
+  const heroImage = "/images/chatgpt.webp";
+  const heroScreenshot = "/images/Designer.png";
+  const featured = TOOLS.filter((t) => t.featured && t.id !== hero.id).slice(0, 3);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 pt-28 pb-24 sm:px-6 lg:px-8">
-      <FadeIn retrigger={false}>
-        <section className="max-w-2xl">
-          <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
-            AI Forge
-          </p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.1] tracking-tight text-stone-900 dark:text-white sm:text-5xl">
-            <SnapHeading text="Find the right AI tool without the noise." />
+    <>
+      {/* Premium AI image backdrop — full viewport width and height */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        <Image
+          src="/images/Designer.png"
+          alt=""
+          fill
+          className="object-cover opacity-[0.10] dark:opacity-[0.07]"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-stone-950" />
+      </div>
+
+      <main className="relative mx-auto px-4 pt-32 pb-24 sm:px-6 lg:px-8">
+
+      {/* Editorial split hero */}
+      <section className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <FadeIn retrigger={false} depth={20}>
+          <div className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-stone-900 dark:bg-white">
+              <span className="text-[11px] font-bold tracking-tight text-white dark:text-stone-900">
+                AF
+              </span>
+            </span>
+            <p className="text-base font-semibold uppercase tracking-[0.2em] text-stone-900 dark:text-white">
+              AI&nbsp;Forge
+            </p>
+          </div>
+          <h1 className="mt-4 text-4xl font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-5xl">
+            <SnapHeading
+              text="Find the right tool"
+              accent="without the noise."
+              accentClassName="text-stone-500 dark:text-stone-400"
+            />
           </h1>
-          <p className="mt-5 text-lg leading-relaxed text-stone-600 dark:text-stone-300">
-            A hand-curated directory of AI tools, organized by what they do
-            and what they cost. No sponsored placements, no inflated counts —
-            just a clean list you can search, filter, and save.
-          </p>
+          <div className="mt-5 max-w-xl space-y-4 text-lg leading-relaxed text-stone-600 dark:text-stone-300">
+            <p>
+              Discover AI tools that make your work{" "}
+              <span className="font-semibold text-stone-900 dark:text-white">
+                smarter, faster, and more efficient
+              </span>
+              . Explore solutions for coding, writing, design, research,
+              productivity, and automation — with clear insights into their{" "}
+              <span className="font-semibold text-stone-900 dark:text-white">
+                features, use cases, and pricing
+              </span>
+              .
+            </p>
+            <p>
+              Whether you&apos;re building projects, creating content, or
+              streamlining everyday tasks, AI Forge helps you find the right
+              tools without endless searching.{" "}
+              <span className="font-semibold text-stone-900 dark:text-white">
+                No sponsored rankings, no unnecessary clutter
+              </span>{" "}
+              — just better AI discovery.
+            </p>
+          </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/directory"
@@ -76,67 +98,91 @@ export default function HomePage() {
             >
               Explore all tools
             </Link>
+            <Link
+              href="/home/about"
+              className="inline-flex items-center gap-2 rounded-md border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
+            >
+              About the directory
+            </Link>
           </div>
-        </section>
+        </FadeIn>
+
+        {/* Featured tool preview card */}
+        <FadeIn retrigger={false} delay={0.15} depth={40}>
+          <Link href={`/tools/${hero.slug}`} className="group block">
+            <Card
+              radius="xl"
+              hover
+              className="overflow-hidden p-0"
+            >
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <Image
+                  src={heroScreenshot}
+                  alt={hero.name}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-3">
+                  <span className="relative h-11 w-11 overflow-hidden rounded-lg ring-1 ring-stone-900/5 dark:ring-white/10">
+                    <Image
+                      src={heroImage}
+                      alt={hero.name}
+                      fill
+                      sizes="44px"
+                      className="object-cover"
+                    />
+                  </span>
+                  <div>
+                    <p className="text-base font-semibold text-stone-900 dark:text-white">
+                      {hero.name}
+                    </p>
+                    <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
+                      {hero.pricing}
+                    </p>
+                  </div>
+                  <ExternalLink className="ml-auto h-4 w-4 text-stone-400 transition-colors group-hover:text-stone-600 dark:group-hover:text-stone-300" />
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                  {hero.shortDescription}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {hero.categories.map((c) => (
+                    <span
+                      key={c}
+                      className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600 dark:bg-white/10 dark:text-stone-300"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </Link>
+        </FadeIn>
+      </section>
+
+      {/* About — interactive selector */}
+      <FadeIn depth={10}>
+        <AboutSelector />
       </FadeIn>
 
-      <FadeIn delay={0.1}>
-        <section className="mt-16 grid gap-px overflow-hidden rounded-lg border border-stone-200 bg-stone-200 sm:grid-cols-3 dark:border-white/10 dark:bg-white/10">
-          {[
-            { label: "Curated tools", note: "hand-picked, not scraped" },
-            { label: "Real categories", note: "filed by what they do" },
-            { label: "Clear pricing", note: "free, freemium, or paid" },
-          ].map((s) => (
-            <div key={s.label} className="bg-white px-6 py-5 dark:bg-stone-950">
-              <p className="text-lg font-semibold tracking-tight text-stone-900 dark:text-white">
-                {s.label}
-              </p>
-              <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-                {s.note}
-              </p>
-            </div>
-          ))}
-        </section>
+      {/* Features — infinite scrolling cards */}
+      <FadeIn depth={10}>
+        <FeaturesRow />
       </FadeIn>
 
-      <FadeIn delay={0.15}>
-        <section className="mt-20">
-          <h2 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
-            What you&apos;ll get from this directory
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-            Most AI directories are little more than a link dump with a
-            search box bolted on. This one is built around a simple idea:
-            you should be able to tell, in seconds, whether a tool is
-            worth your time.
-          </p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {VALUES.map((f) => {
-              const Icon = f.icon;
-              return (
-                <Card
-                  key={f.title}
-                  hover
-                  radius="lg"
-                  className="p-5"
-                >
-                  <Icon className="h-5 w-5 text-stone-500 dark:text-stone-400" />
-                  <h3 className="mt-3 text-base font-medium text-stone-900 dark:text-white">
-                    {f.title}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                    {f.body}
-                  </p>
-                </Card>
-              );
-            })}
-          </div>
-        </section>
+      {/* Login / Signup — curtain slider */}
+      <FadeIn retrigger={false} depth={10}>
+        <AuthSection />
       </FadeIn>
 
+      {/* Featured tools */}
       {featured.length > 0 && (
-        <FadeIn delay={0.2}>
-          <section className="mt-20">
+        <FadeIn delay={0.1} depth={10}>
+          <section className="mt-24">
             <div className="flex items-baseline justify-between">
               <div>
                 <h2 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
@@ -154,60 +200,63 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              {featured.map((tool) => (
-                <Link
-                  key={tool.id}
-                  href={`/tools/${tool.slug}`}
-                  className="group block"
-                >
-                  <Card hover radius="lg" className="p-5">
-                    <div className="flex items-center gap-3">
-                      <span className="relative h-10 w-10 overflow-hidden rounded-md ring-1 ring-stone-900/5 dark:ring-white/10">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={tool.image}
-                          alt={tool.name}
-                          className="h-full w-full object-cover"
-                        />
-                      </span>
-                      <div>
-                        <p className="text-sm font-medium text-stone-900 dark:text-white">
-                          {tool.name}
-                        </p>
-                        <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
-                          {tool.pricing}
-                        </p>
+              {featured.map((tool, i) => (
+                <FadeIn key={tool.id} delay={0.05 * i} depth={20 + i * 8}>
+                  <Link href={`/tools/${tool.slug}`} className="group block h-full">
+                    <Card hover radius="lg" className="h-full p-5">
+                      <div className="flex items-center gap-3">
+                        <span className="relative h-10 w-10 overflow-hidden rounded-md ring-1 ring-stone-900/5 dark:ring-white/10">
+                          <Image
+                            src={tool.image}
+                            alt={tool.name}
+                            fill
+                            sizes="40px"
+                            className="object-cover"
+                          />
+                        </span>
+                        <div>
+                          <p className="text-sm font-medium text-stone-900 dark:text-white">
+                            {tool.name}
+                          </p>
+                          <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
+                            {tool.pricing}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                      {tool.shortDescription}
-                    </p>
-                  </Card>
-                </Link>
+                      <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                        {tool.shortDescription}
+                      </p>
+                    </Card>
+                  </Link>
+                </FadeIn>
               ))}
             </div>
           </section>
         </FadeIn>
       )}
 
-      <FadeIn delay={0.25}>
-        <section className="mt-20 rounded-lg border border-stone-200 p-8 text-center dark:border-white/10">
-          <h2 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
-            Have a tool to share?
-          </h2>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-            Submissions are free and reviewed by a person. If it&apos;s
-            useful and it works, it belongs in the directory.
-          </p>
-          <Link
-            href="/submit"
-            className="mt-5 inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-          >
-            Submit your tool
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+      {/* Submit CTA */}
+      <FadeIn delay={0.15} depth={10}>
+        <section className="mt-24">
+          <Card radius="lg" className="p-8 text-center">
+            <h2 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
+              Have a tool to share?
+            </h2>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+              Submissions are free and reviewed by a person. If it&apos;s
+              useful and it works, it belongs in the directory.
+            </p>
+            <Link
+              href="/submit"
+              className="mt-5 inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+            >
+              Submit your tool
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Card>
         </section>
       </FadeIn>
-    </main>
+      </main>
+    </>
   );
 }

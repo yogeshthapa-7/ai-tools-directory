@@ -18,12 +18,17 @@ const PAUSE_MS = 300;
 
 export function SnapHeading({
   text,
+  accent,
   className,
+  accentClassName,
 }: {
   text: string;
+  accent?: string;
   className?: string;
+  accentClassName?: string;
 }) {
   const [chars, setChars] = useState<(string | null)[]>(text.split(""));
+  const [accentVisible, setAccentVisible] = useState(true);
 
   useEffect(() => {
     const letters = text.split("");
@@ -41,6 +46,7 @@ export function SnapHeading({
     }
 
     function dissolve(done: () => void) {
+      setAccentVisible(false);
       const order = shuffle(letterIdx);
       order.forEach((idx, step) => {
         later(() => {
@@ -65,7 +71,10 @@ export function SnapHeading({
           });
         }, step * PER_LETTER_MS);
       });
-      later(done, order.length * PER_LETTER_MS + PAUSE_MS);
+      later(() => {
+        setAccentVisible(true);
+        done();
+      }, order.length * PER_LETTER_MS + PAUSE_MS);
     }
 
     function cycle() {
@@ -86,21 +95,37 @@ export function SnapHeading({
   }, [text]);
 
   return (
-    <span className={cn("inline-block whitespace-pre", className)} aria-label={text}>
-      {chars.map((ch, i) => (
+    <span className={cn("inline-block whitespace-pre", className)} aria-label={accent ? `${text} ${accent}` : text}>
+      <span className="block">
+        {chars.map((ch, i) => (
+          <span
+            key={i}
+            aria-hidden="true"
+            className={cn(
+              "inline-block transition-all duration-300",
+              ch === null
+                ? "translate-y-1 scale-90 opacity-0 blur-[2px]"
+                : "translate-y-0 scale-100 opacity-100 blur-0"
+            )}
+          >
+            {ch === null ? "" : ch}
+          </span>
+        ))}
+      </span>
+      {accent && (
         <span
-          key={i}
           aria-hidden="true"
           className={cn(
-            "inline-block transition-all duration-300",
-            ch === null
-              ? "translate-y-1 scale-90 opacity-0 blur-[2px]"
-              : "translate-y-0 scale-100 opacity-100 blur-0"
+            "mt-1 block italic transition-all duration-500",
+            accentVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-1 opacity-0",
+            accentClassName
           )}
         >
-          {ch === null ? "" : ch}
+          {accent}
         </span>
-      ))}
+      )}
     </span>
   );
 }

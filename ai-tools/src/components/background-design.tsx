@@ -61,6 +61,7 @@ export function BackgroundDesign() {
     let width = 0;
     let height = 0;
     let running = true;
+    let inView = true;
     let nodes: Node[] = [];
     let edges: Edge[] = [];
 
@@ -116,6 +117,10 @@ export function BackgroundDesign() {
 
     function draw() {
       if (!running) return;
+      if (!inView) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
       const p = isDark() ? PALETTE.dark : PALETTE.light;
 
       const grad = context.createLinearGradient(0, 0, 0, height);
@@ -216,6 +221,14 @@ export function BackgroundDesign() {
       raf = requestAnimationFrame(draw);
     };
 
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0].isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    visibilityObserver.observe(canvas);
+
     resize();
     raf = requestAnimationFrame(draw);
     window.addEventListener("resize", resize);
@@ -226,6 +239,7 @@ export function BackgroundDesign() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       mediaQuery.removeEventListener("change", onThemeChange);
+      visibilityObserver.disconnect();
     };
   }, []);
 
