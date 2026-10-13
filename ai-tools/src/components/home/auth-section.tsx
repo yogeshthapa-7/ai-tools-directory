@@ -113,23 +113,24 @@ function PasswordInput({
 function AuthButton({
   children,
   variant = "outline",
+  className,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "outline" | "google";
 }) {
   const baseClasses =
-    "inline-flex h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl text-base font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+    "inline-flex h-12 w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-xl text-base font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
   const variantStyles: Record<string, React.CSSProperties> = {
     primary: {
-      backgroundColor: "#2563eb",
+      backgroundColor: "#1d4ed8",
       color: "#ffffff",
-      boxShadow: "0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -4px rgba(37, 99, 235, 0.3)",
+      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
     },
     google: {
-      backgroundColor: "#16a34a",
+      backgroundColor: "bg-[#16a34a]",
       color: "#ffffff",
-      boxShadow: "0 10px 15px -3px rgba(22, 163, 74, 0.3), 0 4px 6px -4px rgba(22, 163, 74, 0.3)",
+      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
     },
     outline: {
       backgroundColor: "transparent",
@@ -138,8 +139,8 @@ function AuthButton({
   };
 
   const variantClasses = {
-    primary: "hover:bg-blue-500",
-    google: "hover:bg-green-500",
+    primary: "hover:bg-blue-800 active:bg-blue-900",
+    google: "hover:bg-green-700 active:bg-green-800",
     outline:
       "border border-stone-300 bg-white text-stone-900 shadow-sm shadow-stone-900/5 hover:bg-stone-50 hover:border-stone-400 dark:border-white/15 dark:bg-transparent dark:text-white dark:hover:bg-white/5 dark:hover:border-white/30",
   };
@@ -147,7 +148,7 @@ function AuthButton({
   return (
     <button
       type="button"
-      className={`${baseClasses} ${variantClasses[variant]} ${props.className || ""}`}
+      className={`${baseClasses} ${variantClasses[variant]} ${className || ""}`}
       style={variantStyles[variant]}
       {...props}
     >
@@ -321,11 +322,11 @@ function AuthFormContainer({
           Or continue with
         </span>
       </div>
-      <AuthButton type="button" onClick={() => {}} variant="google" className="h-12">
+      <AuthButton type="button" onClick={() => {}} variant="google">
         <img
           src="/images/google.png"
           alt="Google logo"
-          className="h-5 w-5 object-contain"
+          className="h-6 w-13 object-contain"
         />
         Continue with Google
       </AuthButton>
