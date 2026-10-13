@@ -1,5 +1,3 @@
-"use client";
-
 import { FeaturesRow } from "@/components/home/features-row";
 
 export const metadata = {

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { TOOLS, CATEGORIES } from "@/lib/data";
 import { FadeIn } from "@/components/shared/fade-in";
 import { SnapHeading } from "@/components/shared/snap-heading";
-import { Card } from "@/components/ui/card";
 import { AboutSelector } from "@/components/home/about-selector";
 import { FeaturesRow } from "@/components/home/features-row";
 import { AuthSection } from "@/components/home/auth-section";
+import { Footer } from "@/components/shared/footer";
 
 export const metadata = {
   title: "AI Forge — A calm directory of AI tools",
@@ -19,7 +19,7 @@ export default function HomePage() {
   const hero = TOOLS.find((t) => t.slug === "chatgpt") ?? TOOLS[0];
   const hero_background = "/images/background.png"
   const heroImage = "/images/chatgpt.webp";
-  const heroScreenshot = "/images/Designer.png";
+  const heroScreenshot = "/images/hero_background.png";
   const featured = TOOLS.filter((t) => t.featured && t.id !== hero.id).slice(0, 3);
 
   return (
@@ -106,60 +106,25 @@ export default function HomePage() {
           </div>
         </FadeIn>
 
-        {/* Featured tool preview card */}
+        {/* Featured tool — floating image with edge fade */}
         <FadeIn retrigger={false} delay={0.15} depth={40}>
-          <Link href={`/tools/${hero.slug}`} className="group block">
-            <Card
-              radius="xl"
-              hover
-              className="overflow-hidden p-0"
-            >
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <Image
-                  src={heroScreenshot}
-                  alt={hero.name}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-3">
-                  <span className="relative h-11 w-11 overflow-hidden rounded-lg ring-1 ring-stone-900/5 dark:ring-white/10">
-                    <Image
-                      src={heroImage}
-                      alt={hero.name}
-                      fill
-                      sizes="44px"
-                      className="object-cover"
-                    />
-                  </span>
-                  <div>
-                    <p className="text-base font-semibold text-stone-900 dark:text-white">
-                      {hero.name}
-                    </p>
-                    <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
-                      {hero.pricing}
-                    </p>
-                  </div>
-                  <ExternalLink className="ml-auto h-4 w-4 text-stone-400 transition-colors group-hover:text-stone-600 dark:group-hover:text-stone-300" />
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                  {hero.shortDescription}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {hero.categories.map((c) => (
-                    <span
-                      key={c}
-                      className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600 dark:bg-white/10 dark:text-stone-300"
-                    >
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Card>
-          </Link>
+          <div className="relative flex items-center justify-center">
+            {/* 3D base */}
+            <div className="absolute bottom-4 h-20 w-80 rounded-[50%] bg-gradient-to-b from-stone-300/40 to-stone-400/20 blur-sm dark:from-white/10 dark:to-white/5" />
+            <div className="absolute bottom-6 h-10 w-64 rounded-[50%] bg-stone-900/10 blur-xl dark:bg-black/30" />
+            {/* Image — larger, fading from all sides */}
+            <div className="relative h-[600px] w-[700px]">
+              <Image
+                src={heroScreenshot}
+                alt={hero.name}
+                fill
+                className="object-contain"
+                priority
+              />
+              {/* Edge fade — all sides */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
+            </div>
+          </div>
         </FadeIn>
       </section>
 
@@ -178,83 +143,46 @@ export default function HomePage() {
         <AuthSection />
       </FadeIn>
 
-      {/* Featured tools */}
-      {featured.length > 0 && (
-        <FadeIn delay={0.1} depth={10}>
-          <section className="mt-24">
-            <div className="flex items-baseline justify-between">
-              <div>
-                <h2 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
-                  Featured tools
-                </h2>
-                <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-                  A few worth starting with, chosen from the full directory.
-                </p>
-              </div>
-              <Link
-                href="/directory"
-                className="text-sm font-medium text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"
-              >
-                View all
-              </Link>
-            </div>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              {featured.map((tool, i) => (
-                <FadeIn key={tool.id} delay={0.05 * i} depth={20 + i * 8}>
-                  <Link href={`/tools/${tool.slug}`} className="group block h-full">
-                    <Card hover radius="lg" className="h-full p-5">
-                      <div className="flex items-center gap-3">
-                        <span className="relative h-10 w-10 overflow-hidden rounded-md ring-1 ring-stone-900/5 dark:ring-white/10">
-                          <Image
-                            src={tool.image}
-                            alt={tool.name}
-                            fill
-                            sizes="40px"
-                            className="object-cover"
-                          />
-                        </span>
-                        <div>
-                          <p className="text-sm font-medium text-stone-900 dark:text-white">
-                            {tool.name}
-                          </p>
-                          <p className="text-xs capitalize text-stone-500 dark:text-stone-400">
-                            {tool.pricing}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                        {tool.shortDescription}
-                      </p>
-                    </Card>
-                  </Link>
-                </FadeIn>
-              ))}
-            </div>
-          </section>
-        </FadeIn>
-      )}
-
-      {/* Submit CTA */}
+      {/* Submit CTA — full width */}
       <FadeIn delay={0.15} depth={10}>
         <section className="mt-24">
-          <Card radius="lg" className="p-8 text-center">
-            <h2 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white">
-              Have a tool to share?
-            </h2>
-            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-              Submissions are free and reviewed by a person. If it&apos;s
-              useful and it works, it belongs in the directory.
-            </p>
-            <Link
-              href="/submit"
-              className="mt-5 inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-            >
-              Submit your tool
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Card>
+          <div className="relative overflow-hidden">
+            {/* Animated background */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 animate-background-pan bg-cover bg-center"
+              style={{
+                backgroundImage: `url('/images/submit_tools.png')`,
+                backgroundSize: "contain",
+                backgroundPosition: "left",
+                backgroundRepeat: "no-repeat",
+              }}
+            />
+            {/* Overlay for text legibility */}
+            <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-950/60 to-stone-950/80" />
+            {/* Content */}
+            <div className="relative z-10 px-8 py-16 text-center sm:px-12 sm:py-20">
+              <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                Have a tool to share?
+              </h2>
+              <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-stone-200">
+                Submissions are free and reviewed by a person. If it&apos;s
+                useful and it works, it belongs in the directory.
+              </p>
+              <Link
+                href="/submit"
+                className="mt-6 inline-flex items-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-semibold text-stone-900 shadow-lg shadow-stone-950/20 transition-all hover:bg-stone-100 hover:shadow-xl active:scale-[0.98]"
+              >
+                Submit your tool
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
         </section>
       </FadeIn>
+
+      {/* Footer */}
+      <Footer />
       </main>
     </>
   );
