@@ -86,7 +86,7 @@ export function FeaturesRow({ showHeader = true }: { showHeader?: boolean }) {
             key={`${f.title}-${i}`}
             hover
             radius="lg"
-            className="h-[320px] w-[340px] shrink-0 cursor-pointer p-6"
+            className="feature-card shrink-0 cursor-pointer p-5 sm:p-6"
             onClick={() => setPaused((v) => !v)}
           >
             <Icon className="h-5 w-5 text-stone-500 dark:text-stone-400" />
@@ -103,9 +103,9 @@ export function FeaturesRow({ showHeader = true }: { showHeader?: boolean }) {
   );
 
   return (
-    <section className="mt-28 overflow-hidden">
+    <section className="mt-20 overflow-hidden sm:mt-28">
       {showHeader && (
-        <div className="mb-8 max-w-2xl mx-auto text-center">
+        <div className="mb-6 max-w-2xl mx-auto px-4 text-center sm:mb-8">
           <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
             Features
           </p>
@@ -124,8 +124,8 @@ export function FeaturesRow({ showHeader = true }: { showHeader?: boolean }) {
 
       <div className="group relative">
         {/* edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent dark:from-stone-950" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent dark:from-stone-950" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-white to-transparent dark:from-stone-950 sm:w-16" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-white to-transparent dark:from-stone-950 sm:w-16" />
         {row}
       </div>
     </section>

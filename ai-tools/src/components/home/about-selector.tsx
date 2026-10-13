@@ -108,8 +108,8 @@ export function AboutSelector() {
   const active = OPTIONS[activeIndex];
 
   return (
-    <section className="mt-28">
-      <div className="mb-10 text-center">
+    <section className="mt-20 sm:mt-28">
+      <div className="mb-8 text-center sm:mb-10">
         <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
           About the directory
         </p>
@@ -124,7 +124,7 @@ export function AboutSelector() {
 
       <div className="grid items-stretch gap-8 lg:grid-cols-2 lg:gap-12">
         {/* Left — image carousel */}
-        <div className="flex h-[480px] w-full items-stretch overflow-hidden">
+        <div className="about-carousel flex w-full items-stretch overflow-hidden">
           {OPTIONS.map((option, index) => {
             const isActive = activeIndex === index;
             const isAnimated = animatedOptions.includes(index);
@@ -177,13 +177,13 @@ export function AboutSelector() {
                   }}
                 />
 
-                <div className="pointer-events-none absolute inset-x-0 bottom-5 z-[2] flex h-12 items-center justify-start gap-3 px-4">
-                  <div className="flex h-[44px] min-w-[44px] max-w-[44px] shrink-0 items-center justify-center rounded-full border-2 border-[#444] bg-[rgba(32,32,32,0.85)] shadow-[0_1px_4px_rgba(0,0,0,0.18)] backdrop-blur-[10px]">
+                <div className="pointer-events-none absolute inset-x-0 bottom-4 z-[2] flex h-12 items-center justify-start gap-3 px-3 sm:bottom-5 sm:px-4">
+                  <div className="flex h-[40px] min-w-[40px] max-w-[40px] shrink-0 items-center justify-center rounded-full border-2 border-[#444] bg-[rgba(32,32,32,0.85)] shadow-[0_1px_4px_rgba(0,0,0,0.18)] backdrop-blur-[10px] sm:h-[44px] sm:min-w-[44px] sm:max-w-[44px]">
                     {option.icon}
                   </div>
-                  <div className="relative whitespace-pre text-white">
+                  <div className="relative min-w-0 whitespace-pre text-white">
                     <div
-                      className="text-lg font-bold transition-all duration-700 ease-in-out"
+                      className="truncate text-base font-bold transition-all duration-700 ease-in-out sm:text-lg"
                       style={{
                         opacity: isActive ? 1 : 0,
                         transform: isActive ? "translateX(0)" : "translateX(25px)",
@@ -192,7 +192,7 @@ export function AboutSelector() {
                       {option.title}
                     </div>
                     <div
-                      className="text-base text-gray-300 transition-all duration-700 ease-in-out"
+                      className="truncate text-xs text-gray-300 transition-all duration-700 ease-in-out sm:text-base"
                       style={{
                         opacity: isActive ? 1 : 0,
                         transform: isActive ? "translateX(0)" : "translateX(25px)",
@@ -208,7 +208,7 @@ export function AboutSelector() {
         </div>
 
         {/* Right — dynamic tool details */}
-        <div className="flex h-[480px] flex-col justify-start">
+        <div className="about-details flex flex-col justify-start">
           <div key={active.slug} className="animate-fade-in-top pt-2">
             <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
               {active.details.pricing}

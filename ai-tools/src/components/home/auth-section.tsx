@@ -376,8 +376,8 @@ export function AuthSection() {
   const formOnLeft = displaySignIn;
 
   return (
-    <section className="mt-28">
-      <div className="mb-10 max-w-2xl mx-auto text-center">
+    <section className="mt-20 sm:mt-28">
+      <div className="mb-8 max-w-2xl mx-auto px-4 text-center sm:mb-10">
         <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
           Account
         </p>
@@ -402,7 +402,7 @@ export function AuthSection() {
           {/* Form side */}
           <div
             className={cn(
-              "relative flex items-center justify-center bg-gradient-to-br from-stone-100 via-stone-200 to-stone-300 p-8 md:p-12 lg:p-16 dark:from-stone-800 dark:via-stone-700 dark:to-stone-600",
+              "relative flex items-center justify-center bg-gradient-to-br from-stone-100 via-stone-200 to-stone-300 p-6 sm:p-8 md:p-12 lg:p-16 dark:from-stone-800 dark:via-stone-700 dark:to-stone-600",
               formOnLeft ? "md:order-1" : "md:order-2"
             )}
           >
@@ -415,7 +415,7 @@ export function AuthSection() {
           {/* Image side */}
           <div
             className={cn(
-              "relative hidden bg-cover bg-center transition-all duration-500 ease-in-out md:block",
+              "auth-image-side relative hidden bg-cover bg-center transition-all duration-500 ease-in-out md:block",
               formOnLeft ? "md:order-2" : "md:order-1"
             )}
             style={{ backgroundImage: `url(${currentContent.image.src})` }}

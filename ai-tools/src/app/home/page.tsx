@@ -38,10 +38,10 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-stone-950" />
       </div>
 
-      <main className="relative mx-auto px-4 pt-32 pb-24 sm:px-6 lg:px-8">
+      <main className="home-main relative px-4 pt-28 pb-20 sm:px-6 sm:pt-32 sm:pb-24 lg:px-8">
 
       {/* Editorial split hero */}
-      <section className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <section className="grid items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
         <FadeIn retrigger={false} depth={20}>
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-stone-900 dark:bg-white">
@@ -53,14 +53,14 @@ export default function HomePage() {
               AI&nbsp;Forge
             </p>
           </div>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-5xl">
+          <h1 className="mt-4 text-[2rem] font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-5xl">
             <SnapHeading
               text="Find the right tool"
               accent="without the noise."
               accentClassName="text-stone-500 dark:text-stone-400"
             />
           </h1>
-          <div className="mt-5 max-w-xl space-y-4 text-lg leading-relaxed text-stone-600 dark:text-stone-300">
+          <div className="mt-5 max-w-xl space-y-4 text-base leading-relaxed text-stone-600 dark:text-stone-300 sm:text-lg">
             <p>
               Discover AI tools that make your work{" "}
               <span className="font-semibold text-stone-900 dark:text-white">
@@ -103,17 +103,16 @@ export default function HomePage() {
             >
               About the directory
             </Link>
-          </div>
-        </FadeIn>
+          </div>        </FadeIn>
 
         {/* Featured tool — floating image with edge fade */}
         <FadeIn retrigger={false} delay={0.15} depth={40}>
           <div className="relative flex items-center justify-center">
             {/* 3D base */}
-            <div className="absolute bottom-4 h-20 w-80 rounded-[50%] bg-gradient-to-b from-stone-300/40 to-stone-400/20 blur-sm dark:from-white/10 dark:to-white/5" />
-            <div className="absolute bottom-6 h-10 w-64 rounded-[50%] bg-stone-900/10 blur-xl dark:bg-black/30" />
-            {/* Image — larger, fading from all sides */}
-            <div className="relative h-[600px] w-[700px]">
+            <div className="absolute bottom-4 h-16 w-56 rounded-[50%] bg-gradient-to-b from-stone-300/40 to-stone-400/20 blur-sm dark:from-white/10 dark:to-white/5 sm:h-20 sm:w-80" />
+            <div className="absolute bottom-6 h-8 w-44 rounded-[50%] bg-stone-900/10 blur-xl dark:bg-black/30 sm:h-10 sm:w-64" />
+            {/* Image — responsive, fading from all sides */}
+            <div className="hero-image-wrap">
               <Image
                 src={heroScreenshot}
                 alt={hero.name}
@@ -145,7 +144,7 @@ export default function HomePage() {
 
       {/* Submit CTA — full width */}
       <FadeIn delay={0.15} depth={10}>
-        <section className="mt-24">
+        <section className="mt-16 sm:mt-24">
           <div className="relative overflow-hidden">
             {/* Animated background */}
             <div
@@ -161,8 +160,8 @@ export default function HomePage() {
             {/* Overlay for text legibility */}
             <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-950/60 to-stone-950/80" />
             {/* Content */}
-            <div className="relative z-10 px-8 py-16 text-center sm:px-12 sm:py-20">
-              <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            <div className="relative z-10 px-6 py-14 text-center sm:px-12 sm:py-20">
+              <h2 className="text-xl font-semibold tracking-tight text-white sm:text-3xl">
                 Have a tool to share?
               </h2>
               <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-stone-200">

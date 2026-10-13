@@ -168,8 +168,8 @@ export function Footer({
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-none px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+      <div className="relative z-10 mx-auto max-w-none px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div className="mx-auto grid max-w-6xl gap-8 sm:gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           {/* Brand column */}
           <div>
             <p
@@ -238,7 +238,7 @@ export function Footer({
 
         {/* Bottom bar */}
         <div
-          className="footer-fade mt-12 flex flex-col items-center justify-between gap-4 border-t border-stone-800 pt-6 sm:flex-row"
+          className="footer-fade mt-10 flex flex-col items-center justify-between gap-4 border-t border-stone-800 pt-6 sm:mt-12 sm:flex-row"
           style={delay()}
         >
           <p className="text-xs text-stone-500">
