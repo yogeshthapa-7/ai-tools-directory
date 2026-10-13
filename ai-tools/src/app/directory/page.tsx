@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 import { Search, X, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { FilterSidebar } from "@/components/layout/filter-sidebar";
 import { ToolCard } from "@/components/tool/ToolCard";
@@ -73,8 +74,42 @@ export default function DirectoryPage() {
 
   return (
     <div className="min-h-screen text-stone-900 dark:text-stone-100 selection:bg-stone-500/30">
-      <div className="fixed inset-y-0 left-0 z-40 hidden border-r border-stone-200/80 bg-white/60 backdrop-blur-md dark:border-white/10 dark:bg-black/30 lg:block lg:top-16">
-        <div className="sidebar-scroll h-full overflow-y-auto">
+      {/* 3D model background — fixed, subtle, behind everything */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      >
+        <div
+          className="absolute inset-0 opacity-[0.15] dark:opacity-[0.08]"
+          style={{
+            backgroundImage: `url('/images/directory_image.avif')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
+          }}
+        />
+        {/* 3D depth overlay — subtle gradient for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/40 dark:to-stone-950/40" />
+        {/* Radial vignette for 3D focus */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(255,255,255,0.3)_100%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)]" />
+      </div>
+
+      <div className="fixed inset-y-0 left-0 z-40 hidden border-r border-stone-200/80 bg-white/60 backdrop-blur-md dark:border-white/10 dark:bg-black/30 lg:block lg:top-16 lg:pt-4">
+        {/* Sidebar background image — subtle, behind content */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.08] dark:opacity-[0.05]"
+          style={{
+            backgroundImage: `url('/images/sidebar.jpg')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+        {/* Sidebar content — above background */}
+        <div className="sidebar-scroll relative h-full overflow-y-auto">
           <FilterSidebar
             collapsed={sidebarCollapsed}
             onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
@@ -88,24 +123,70 @@ export default function DirectoryPage() {
 
       <main
         className={
-          "sidebar-scroll h-screen overflow-y-auto transition-[padding] duration-300 ease-out lg:pl-20 xl:pl-72 " +
-          (sidebarCollapsed ? "lg:pl-20 xl:pl-20" : "")
+          "sidebar-scroll h-screen overflow-y-auto transition-[padding] duration-300 ease-out lg:pl-24 xl:pl-80 " +
+          (sidebarCollapsed ? "lg:pl-24 xl:pl-24" : "")
         }
       >
         <div className="mx-auto max-w-6xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
-        <section className="mb-12">
-          <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
-            Directory
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-stone-900 dark:text-white sm:text-4xl">
-            Browse every tool
-          </h1>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-stone-600 dark:text-stone-300">
-            Search by name, description, or tag. Narrow by category and
-            pricing. Save the ones worth keeping.
-          </p>
+        <section className="mb-12 grid items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* Left — text content */}
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-stone-900 dark:bg-white">
+                <span className="text-[11px] font-bold tracking-tight text-white dark:text-stone-900">
+                  AF
+                </span>
+              </span>
+              <p className="text-base font-semibold uppercase tracking-[0.2em] text-stone-900 dark:text-white">
+                AI&nbsp;Forge Directory
+              </p>
+            </div>
+            <h1 className="mt-4 text-[2rem] font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-5xl">
+              Browse every tool
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-stone-600 dark:text-stone-300 sm:text-lg">
+              Search by name, description, or tag. Narrow by category and
+              pricing. Save the ones worth keeping. Every listing is
+              hand-picked and filed by what it actually achieves — no
+              sponsored rankings, no noise.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#tools"
+                className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+              >
+                Start browsing
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <a
+                href="/submit"
+                className="inline-flex items-center gap-2 rounded-md border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
+              >
+                Submit a tool
+              </a>
+            </div>
+          </div>
 
-          <div className="relative mt-8 max-w-2xl">
+          {/* Right — hero image */}
+          <div className="relative flex items-center justify-center">
+            <div className="absolute bottom-4 h-16 w-56 rounded-[50%] bg-gradient-to-b from-stone-300/40 to-stone-400/20 blur-sm dark:from-white/10 dark:to-white/5 sm:h-20 sm:w-80" />
+            <div className="absolute bottom-6 h-8 w-44 rounded-[50%] bg-stone-900/10 blur-xl dark:bg-black/30 sm:h-10 sm:w-64" />
+            <div className="relative h-[300px] w-full sm:h-[420px] sm:w-[520px] lg:h-[500px] lg:w-[600px]">
+              <Image
+                src="/images/directory_hero.png"
+                alt="AI tools directory"
+                fill
+                className="object-contain"
+                priority
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
+            </div>
+          </div>
+        </section>
+
+        {/* Search bar */}
+        <section className="mb-8">
+          <div className="relative max-w-2xl">
             <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
             <input
               type="search"
@@ -127,6 +208,8 @@ export default function DirectoryPage() {
             )}
           </div>
         </section>
+
+        <section id="tools" className="scroll-mt-24">
 
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-stone-600 dark:text-stone-400">
@@ -207,23 +290,24 @@ export default function DirectoryPage() {
                 <Card radius="lg" className="mb-6 p-8">
                   <Search className="h-10 w-10 text-stone-400 mx-auto" />
                 </Card>
-              <h3 className="text-xl font-semibold text-stone-900 dark:text-white mb-2">
-                No tools found
-              </h3>
-              <p className="text-stone-600 dark:text-stone-400 mb-6 max-w-md text-sm leading-relaxed">
-                Nothing matches your current search and filters. Try
-                different terms or clear them.
-              </p>
-              <button
-                type="button"
-                onClick={clearAll}
-                className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-              >
-                Clear all filters
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
+                <h3 className="text-xl font-semibold text-stone-900 dark:text-white mb-2">
+                  No tools found
+                </h3>
+                <p className="text-stone-600 dark:text-stone-400 mb-6 max-w-md text-sm leading-relaxed">
+                  Nothing matches your current search and filters. Try
+                  different terms or clear them.
+                </p>
+                <button
+                  type="button"
+                  onClick={clearAll}
+                  className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+                >
+                  Clear all filters
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
           )}
+        </section>
         </div>
       </main>
 

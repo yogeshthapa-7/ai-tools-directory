@@ -368,10 +368,9 @@ export function AuthSection() {
       setIsSignIn((prev) => !prev);
       setDisplaySignIn((prev) => !prev);
       setCurtain("revealing");
-      window.setTimeout(() => setCurtain("idle"), 600);
-    }, 600);
+      window.setTimeout(() => setCurtain("idle"), 700);
+    }, 700);
   };
-
   const currentContent = displaySignIn ? SIGN_IN_CONTENT : SIGN_UP_CONTENT;
   const formOnLeft = displaySignIn;
 

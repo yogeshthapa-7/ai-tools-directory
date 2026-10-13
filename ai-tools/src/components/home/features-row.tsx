@@ -78,8 +78,9 @@ export function FeaturesRow({ showHeader = true }: { showHeader?: boolean }) {
         "flex w-max items-stretch gap-4",
         !paused && "animate-scroll-x"
       )}
+      style={{ willChange: "transform" }}
     >
-      {[...FEATURES, ...FEATURES].map((f, i) => {
+      {[...FEATURES, ...FEATURES, ...FEATURES].map((f, i) => {
         const Icon = f.icon;
         return (
           <Card

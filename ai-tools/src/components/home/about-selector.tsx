@@ -151,7 +151,7 @@ export function AboutSelector() {
                   transition:
                     "flex-grow 700ms ease-in-out, box-shadow 700ms ease-in-out, background-size 700ms ease-in-out, border-color 700ms ease-in-out, opacity 700ms ease-in-out, transform 700ms ease-in-out",
                   flex: isActive ? "7 1 0%" : "1 1 0%",
-                  minWidth: "60px",
+                  minWidth: isActive ? "180px" : "50px",
                   borderWidth: "2px",
                   borderStyle: "solid",
                   borderColor: isActive ? "#ffffff" : "#292929",
@@ -181,7 +181,7 @@ export function AboutSelector() {
                   <div className="flex h-[40px] min-w-[40px] max-w-[40px] shrink-0 items-center justify-center rounded-full border-2 border-[#444] bg-[rgba(32,32,32,0.85)] shadow-[0_1px_4px_rgba(0,0,0,0.18)] backdrop-blur-[10px] sm:h-[44px] sm:min-w-[44px] sm:max-w-[44px]">
                     {option.icon}
                   </div>
-                  <div className="relative min-w-0 whitespace-pre text-white">
+                  <div className="relative min-w-0 flex-1 whitespace-pre text-white">
                     <div
                       className="truncate text-base font-bold transition-all duration-700 ease-in-out sm:text-lg"
                       style={{
@@ -201,8 +201,7 @@ export function AboutSelector() {
                       {option.description}
                     </div>
                   </div>
-                </div>
-              </div>
+                </div>              </div>
             );
           })}
         </div>
