@@ -358,9 +358,22 @@ const SIGN_UP_CONTENT = {
 
 export function AuthSection() {
   const [isSignIn, setIsSignIn] = useState(true);
-  const toggleForm = () => setIsSignIn((prev) => !prev);
+  const [curtain, setCurtain] = useState<"idle" | "covering" | "revealing">("idle");
+  const [displaySignIn, setDisplaySignIn] = useState(true);
 
-  const currentContent = isSignIn ? SIGN_IN_CONTENT : SIGN_UP_CONTENT;
+  const toggleForm = () => {
+    if (curtain !== "idle") return;
+    setCurtain("covering");
+    window.setTimeout(() => {
+      setIsSignIn((prev) => !prev);
+      setDisplaySignIn((prev) => !prev);
+      setCurtain("revealing");
+      window.setTimeout(() => setCurtain("idle"), 600);
+    }, 600);
+  };
+
+  const currentContent = displaySignIn ? SIGN_IN_CONTENT : SIGN_UP_CONTENT;
+  const formOnLeft = displaySignIn;
 
   return (
     <section className="mt-28">
@@ -385,16 +398,26 @@ export function AuthSection() {
             display: none;
           }
         `}</style>
-        <div className="grid md:grid-cols-2">
-          <div className="relative flex items-center justify-center bg-gradient-to-br from-stone-100 via-stone-200 to-stone-300 p-8 md:p-12 lg:p-16 dark:from-stone-800 dark:via-stone-700 dark:to-stone-600">
+        <div className="relative grid md:grid-cols-2">
+          {/* Form side */}
+          <div
+            className={cn(
+              "relative flex items-center justify-center bg-gradient-to-br from-stone-100 via-stone-200 to-stone-300 p-8 md:p-12 lg:p-16 dark:from-stone-800 dark:via-stone-700 dark:to-stone-600",
+              formOnLeft ? "md:order-1" : "md:order-2"
+            )}
+          >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
             <div className="relative">
-              <AuthFormContainer isSignIn={isSignIn} onToggle={toggleForm} />
+              <AuthFormContainer isSignIn={displaySignIn} onToggle={toggleForm} />
             </div>
           </div>
 
+          {/* Image side */}
           <div
-            className="relative hidden bg-cover bg-center transition-all duration-500 ease-in-out md:block"
+            className={cn(
+              "relative hidden bg-cover bg-center transition-all duration-500 ease-in-out md:block",
+              formOnLeft ? "md:order-2" : "md:order-1"
+            )}
             style={{ backgroundImage: `url(${currentContent.image.src})` }}
             key={currentContent.image.src}
           >
@@ -416,6 +439,17 @@ export function AuthSection() {
               </blockquote>
             </div>
           </div>
+
+          {/* Curtain overlay */}
+          {curtain !== "idle" && (
+            <div
+              aria-hidden="true"
+              className={cn(
+                "pointer-events-none absolute inset-0 z-20 bg-gradient-to-br from-stone-200 via-stone-300 to-stone-400 dark:from-stone-700 dark:via-stone-600 dark:to-stone-500",
+                curtain === "covering" ? "animate-curtain-cover" : "animate-curtain-reveal"
+              )}
+            />
+          )}
         </div>
       </div>
     </section>
