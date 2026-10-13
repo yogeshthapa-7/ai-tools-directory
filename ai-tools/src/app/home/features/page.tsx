@@ -1,6 +1,6 @@
 "use client";
 
-import { FeaturesRow } from "@/components/features-row";
+import { FeaturesRow } from "@/components/home/features-row";
 
 export const metadata = {
   title: "Features — AI Forge",

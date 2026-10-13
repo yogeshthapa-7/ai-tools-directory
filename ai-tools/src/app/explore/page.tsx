@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiltersBar } from "@/components/filters/FiltersBar";
+import { FilterSidebar } from "@/components/layout/filter-sidebar";
 import { ToolCard } from "@/components/tool/ToolCard";
 import { TOOLS, type Pricing } from "@/lib/data";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -221,7 +221,9 @@ export default function ExplorePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <FiltersBar
+              <FilterSidebar
+                collapsed={false}
+                onToggleCollapse={() => {}}
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
                 selectedPricing={selectedPricing}
@@ -343,7 +345,9 @@ export default function ExplorePage() {
                 </button>
               </div>
               <div className="p-4">
-                <FiltersBar
+                <FilterSidebar
+                  collapsed={false}
+                  onToggleCollapse={() => {}}
                   selectedCategory={selectedCategory}
                   onSelectCategory={(cat) => {
                     setSelectedCategory(cat);

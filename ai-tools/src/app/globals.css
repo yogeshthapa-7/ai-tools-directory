@@ -119,3 +119,37 @@ html.no-scroll body {
 .animate-curtain-reveal {
   animation: curtain-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+@keyframes fade-in-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-top {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fade-in-top 0.5s ease-in-out forwards;
+}
+
+@keyframes scroll-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-x {
+  animation: scroll-x 40s linear infinite;
+}
+
+.animate-scroll-x:hover {
+  animation-play-state: paused;
+}

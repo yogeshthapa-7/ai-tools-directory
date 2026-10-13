@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { Search, X, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { FilterSidebar } from "@/components/navigation/filter-sidebar";
+import { FilterSidebar } from "@/components/layout/filter-sidebar";
 import { ToolCard } from "@/components/tool/ToolCard";
 import { Card } from "@/components/ui/card";
 import { TOOLS, type Pricing } from "@/lib/data";

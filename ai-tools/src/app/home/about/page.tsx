@@ -1,6 +1,6 @@
 "use client";
 
-import { AboutSelector } from "@/components/about-selector";
+import { AboutSelector } from "@/components/home/about-selector";
 
 export const metadata = {
   title: "About — AI Forge",

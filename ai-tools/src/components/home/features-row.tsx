@@ -73,15 +73,21 @@ export function FeaturesRow({ showHeader = true }: { showHeader?: boolean }) {
   const [paused, setPaused] = useState(false);
 
   const row = (
-    <div className="flex w-max items-stretch gap-4">
+    <div
+      className={cn(
+        "flex w-max items-stretch gap-4",
+        !paused && "animate-scroll-x"
+      )}
+    >
       {[...FEATURES, ...FEATURES].map((f, i) => {
         const Icon = f.icon;
         return (
-            <Card
+          <Card
             key={`${f.title}-${i}`}
             hover
             radius="lg"
-            className="h-[320px] w-[340px] shrink-0 p-6"
+            className="h-[320px] w-[340px] shrink-0 cursor-pointer p-6"
+            onClick={() => setPaused((v) => !v)}
           >
             <Icon className="h-5 w-5 text-stone-500 dark:text-stone-400" />
             <h3 className="mt-3 text-base font-medium text-stone-900 dark:text-white">
@@ -116,36 +122,12 @@ export function FeaturesRow({ showHeader = true }: { showHeader?: boolean }) {
         </div>
       )}
 
-      <div
-        className={cn(
-          "group relative",
-          paused ? "" : "animate-scroll-x"
-        )}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="group relative">
         {/* edge fades */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent dark:from-stone-950" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent dark:from-stone-950" />
         {row}
       </div>
-
-      <style jsx>{`
-        @keyframes scrollX {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-scroll-x {
-          animation: scrollX 40s linear infinite;
-        }
-        .animate-scroll-x:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
     </section>
   );
 }

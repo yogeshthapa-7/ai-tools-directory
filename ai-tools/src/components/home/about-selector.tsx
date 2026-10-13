@@ -209,7 +209,7 @@ export function AboutSelector() {
 
         {/* Right — dynamic tool details */}
         <div className="flex h-[480px] flex-col justify-start">
-          <div key={active.slug} className="animate-fadeInTop pt-2">
+          <div key={active.slug} className="animate-fade-in-top pt-2">
             <p className="text-sm font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">
               {active.details.pricing}
             </p>
@@ -238,24 +238,6 @@ export function AboutSelector() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeInFromTop {
-          0% {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeInTop {
-          opacity: 0;
-          transform: translateY(-20px);
-          animation: fadeInFromTop 0.5s ease-in-out forwards;
-        }
-      `}</style>
     </section>
   );
 }

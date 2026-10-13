@@ -2,12 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { TOOLS, CATEGORIES } from "@/lib/data";
-import { FadeIn } from "@/components/fade-in";
-import { SnapHeading } from "@/components/snap-heading";
+import { FadeIn } from "@/components/shared/fade-in";
+import { SnapHeading } from "@/components/shared/snap-heading";
 import { Card } from "@/components/ui/card";
-import { AboutSelector } from "@/components/about-selector";
-import { FeaturesRow } from "@/components/features-row";
-import { AuthSection } from "@/components/auth-section";
+import { AboutSelector } from "@/components/home/about-selector";
+import { FeaturesRow } from "@/components/home/features-row";
+import { AuthSection } from "@/components/home/auth-section";
 
 export const metadata = {
   title: "AI Forge — A calm directory of AI tools",
@@ -17,24 +17,23 @@ export const metadata = {
 
 export default function HomePage() {
   const hero = TOOLS.find((t) => t.slug === "chatgpt") ?? TOOLS[0];
-  const hero_background = "/images/ai-background.png"
+  const hero_background = "/images/background.png"
   const heroImage = "/images/chatgpt.webp";
   const heroScreenshot = "/images/Designer.png";
   const featured = TOOLS.filter((t) => t.featured && t.id !== hero.id).slice(0, 3);
 
   return (
     <>
-      {/* Premium AI image backdrop — full viewport width and height */}
+      {/* Full-page backdrop — visible behind every section */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
         <Image
-          src="/images/Designer.png"
+          src="/images/background.png"
           alt=""
           fill
           className="object-cover opacity-[0.10] dark:opacity-[0.07]"
-          priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-stone-950" />
       </div>
