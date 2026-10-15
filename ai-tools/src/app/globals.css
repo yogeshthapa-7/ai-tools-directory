@@ -197,6 +197,35 @@ html.no-scroll body {
   animation: background-pan 20s ease-in-out infinite;
 }
 
+/* Neon glow around the directory search bar */
+@property --neon-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes neon-angle {
+  to {
+    --neon-angle: 360deg;
+  }
+}
+
+.animate-neon-angle {
+  animation: neon-angle 3s linear infinite;
+}
+
+@supports not (background: conic-gradient(from 0deg, red, blue)) {
+  .neon-glow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-neon-angle {
+    animation: none;
+  }
+}
+
 /* Homepage responsive helpers */
 .home-section {
   padding-top: 5rem;

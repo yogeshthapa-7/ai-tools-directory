@@ -9,9 +9,10 @@ import { Card } from "@/components/ui/card";
 import { TOOLS, type Pricing } from "@/lib/data";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { SnapHeading } from "@/components/shared/snap-heading";
+import { ViewToggle, type ViewMode } from "@/components/ui/view-toggle";
 import { cn } from "@/lib/utils";
 
-const TOOLS_PER_PAGE = 10;
+const TOOLS_PER_PAGE = 12;
 
 export default function DirectoryPage() {
   const [search, setSearch] = useState("");
@@ -20,6 +21,7 @@ export default function DirectoryPage() {
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>("bookmarks", []);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -129,7 +131,7 @@ export default function DirectoryPage() {
         }
       >
         <div className="px-4 pt-24 pb-20 sm:px-6 lg:px-8">
-        <section className="mb-12 grid items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
+        <section className="grid items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left — text content */}
           <div>
             <div className="flex items-center gap-3">
@@ -170,8 +172,6 @@ export default function DirectoryPage() {
                 Submit a tool
               </a>
             </div>
-            {/* Divider — separates the header from the tools below */}
-            <hr className="mt-10 h-px w-full max-w-xl border-0 bg-gradient-to-r from-stone-300 via-stone-300/60 to-transparent dark:from-white/20 dark:via-white/10" />
           </div>
 
           {/* Right — hero image */}
@@ -189,52 +189,84 @@ export default function DirectoryPage() {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
             </div>
           </div>
+
+          {/* Divider — full width, closes the header */}
+          <hr className="mt-10 mb-6 h-px w-full border-0 bg-gradient-to-r from-stone-300 via-stone-300/50 to-stone-300/10 dark:from-white/20 dark:via-white/10 dark:to-white/[0.02]" />
         </section>
 
-        {/* Search bar */}
-        <section className="mb-8">
-          <div className="relative max-w-2xl">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search tools, categories, or tags"
-              aria-label="Search tools"
-              className="h-11 w-full rounded-md border border-stone-300 bg-white pl-10 pr-10 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition-colors focus:border-stone-500 dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-white/40"
-            />
-            {search && (
+        {/* Search + view toggle — single row */}
+        <section className="mb-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            {/* Left — search */}
+            <div className="group w-full sm:max-w-md">
+              <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">
+                Search here
+              </h2>
+              <div className="relative mt-3">
+                {/* Moving neon glow — appears only while focused */}
+                <div
+                  aria-hidden="true"
+                  className="neon-glow pointer-events-none absolute -inset-[3px] rounded-[10px] bg-[conic-gradient(from_var(--neon-angle),#7dd3fc_0%,#a5b4fc_18%,#e0f2fe_32%,transparent_55%,transparent_100%)] opacity-0 blur-[7px] transition-opacity duration-500 group-focus-within:opacity-90 group-focus-within:animate-neon-angle"
+                />
+                {/* 3D field */}
+                <div className="relative rounded-lg bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(28,25,23,0.06),0_4px_10px_-4px_rgba(28,25,23,0.10)] transition-all duration-300 group-focus-within:shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_2px_4px_rgba(28,25,23,0.08),0_10px_24px_-8px_rgba(56,189,248,0.45)] dark:bg-stone-900 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_1px_2px_rgba(0,0,0,0.4)] dark:group-focus-within:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_-8px_rgba(125,211,252,0.35)]">
+                  <Search className="pointer-events-none rounded absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 transition-colors duration-300 group-focus-within:text-stone-600 dark:group-focus-within:text-stone-300" />
+                  <input
+                    type="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search tools, categories, or tags"
+                    aria-label="Search tools"
+                    className="h-11 w-full rounded-md border border-stone-300 bg-transparent pl-10 pr-10 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition-colors duration-300 focus:border-sky-300/70 dark:border-white/15 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-sky-400/40"
+                  />
+                  {search && (
+                    <button
+                      type="button"
+                      onClick={() => setSearch("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-white/10 dark:hover:text-stone-300"
+                      aria-label="Clear search"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right — view toggle + mobile filters */}
+            <div className="flex shrink-0 items-center gap-2">
+              <ViewToggle value={viewMode} onChange={setViewMode} />
               <button
                 type="button"
-                onClick={() => setSearch("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-white/10 dark:hover:text-stone-300"
-                aria-label="Clear search"
+                onClick={() => setShowMobileFilters(true)}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-stone-300 px-3.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5 lg:hidden"
               >
-                <X className="h-4 w-4" />
+                <SlidersHorizontal className="h-4 w-4" />
+                Filters
               </button>
-            )}
+            </div>
           </div>
         </section>
 
         <section id="tools" className="scroll-mt-24">
-
-          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-5 flex items-center justify-between gap-3">
             <p className="text-sm text-stone-600 dark:text-stone-400">
               Explore all tools
             </p>
-            <button
-              type="button"
-              onClick={() => setShowMobileFilters(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-stone-300 px-3.5 py-2 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5 lg:hidden"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              Filters
-            </button>
+            {/* <p className="text-sm text-stone-500 dark:text-stone-400">
+              {filteredTools.length} {filteredTools.length === 1 ? "tool" : "tools"}
+            </p> */}
           </div>
 
           {filteredTools.length > 0 ? (
             <>
-              <div className="flex flex-col gap-3">
+              <div
+                className={cn(
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3"
+                    : "flex flex-col gap-3"
+                )}
+              >
                 {paginatedTools.map((tool) => (
                   <ToolCard
                     key={tool.id}
