@@ -8,6 +8,7 @@ import { ToolCard } from "@/components/tool/ToolCard";
 import { Card } from "@/components/ui/card";
 import { TOOLS, type Pricing } from "@/lib/data";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { SnapHeading } from "@/components/shared/snap-heading";
 import { cn } from "@/lib/utils";
 
 const TOOLS_PER_PAGE = 10;
@@ -123,11 +124,11 @@ export default function DirectoryPage() {
 
       <main
         className={
-          "sidebar-scroll h-screen overflow-y-auto transition-[padding] duration-300 ease-out lg:pl-24 xl:pl-80 " +
-          (sidebarCollapsed ? "lg:pl-24 xl:pl-24" : "")
+          "sidebar-scroll h-screen overflow-y-auto transition-[padding] duration-300 ease-out " +
+          (sidebarCollapsed ? "lg:pl-24" : "lg:pl-80")
         }
       >
-        <div className="mx-auto max-w-6xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
+        <div className="px-4 pt-24 pb-20 sm:px-6 lg:px-8">
         <section className="mb-12 grid items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left — text content */}
           <div>
@@ -142,13 +143,17 @@ export default function DirectoryPage() {
               </p>
             </div>
             <h1 className="mt-4 text-[2rem] font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-5xl">
-              Browse every tool
+              <SnapHeading
+                text="Browse every tool"
+                accent="without the noise."
+                accentClassName="text-stone-500 dark:text-stone-400"
+              />
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-stone-600 dark:text-stone-300 sm:text-lg">
               Search by name, description, or tag. Narrow by category and
               pricing. Save the ones worth keeping. Every listing is
               hand-picked and filed by what it actually achieves — no
-              sponsored rankings, no noise.
+              sponsored rankings, no clutter.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -165,6 +170,8 @@ export default function DirectoryPage() {
                 Submit a tool
               </a>
             </div>
+            {/* Divider — separates the header from the tools below */}
+            <hr className="mt-10 h-px w-full max-w-xl border-0 bg-gradient-to-r from-stone-300 via-stone-300/60 to-transparent dark:from-white/20 dark:via-white/10" />
           </div>
 
           {/* Right — hero image */}
