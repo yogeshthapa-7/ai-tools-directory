@@ -23,15 +23,26 @@ const radiusMap = {
 };
 
 const variants = {
-  default:
-    "border border-stone-200 bg-white dark:border-white/10 dark:bg-stone-950",
-  elevated:
-    "border border-stone-200 bg-white shadow-sm shadow-stone-900/5 dark:border-white/10 dark:bg-stone-950 dark:shadow-black/20",
-  outlined:
-    "border border-stone-300 bg-transparent dark:border-white/20",
-  glass:
-    "border border-stone-200/60 bg-white/70 backdrop-blur-md dark:border-white/10 dark:bg-white/5",
-};
+    default:
+      "",
+    elevated:
+      "",
+    outlined:
+      "bg-gradient-to-br from-gray-800/90 via-white/45 to-gray-800/90 dark:from-gray-900/90 dark:via-white/25 dark:to-gray-900/90",
+    glass:
+      "bg-gradient-to-br from-gray-800/70 via-white/35 to-gray-800/70 dark:from-gray-900/70 dark:via-white/15 dark:to-gray-900/70",
+  };
+
+const cardBase =
+    "relative overflow-hidden border border-white/15 dark:border-white/10 " +
+    "drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)] " +
+    "transition-all duration-200 ease-out " +
+    "bg-gradient-to-br from-gray-800 via-white/50 to-gray-800";
+
+const hoverStyles =
+  "hover:-translate-y-1 hover:scale-[1.02] " +
+  "drop-shadow-[0_6px_14px_-2px_rgba(0,0,0,0.55),0_2px_4px_rgba(0,0,0,0.4)] " +
+  "hover:border-white/25 dark:hover:border-white/15";
 
 export const Card = forwardRef<HTMLDivElement & HTMLAnchorElement, CardProps>(
   (
@@ -50,14 +61,21 @@ export const Card = forwardRef<HTMLDivElement & HTMLAnchorElement, CardProps>(
       <Tag
         ref={ref}
         className={cn(
-          radiusMap[radius],
+          cardBase,
           variants[variant],
-          hover &&
-            "transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-md hover:shadow-stone-900/5 hover:border-stone-300 dark:hover:border-white/20 dark:hover:shadow-black/30",
+          radiusMap[radius],
+          hover && hoverStyles,
           className
         )}
         {...props}
-      />
+      >
+        {hover && <span className="card-shine" aria-hidden="true" />}
+        {/* Neon accent effect - only show on hover to reduce performance impact */}
+        {hover && (
+          <span className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-neon-shift" aria-hidden="true"></span>
+        )}
+        {props.children}
+      </Tag>
     );
   }
 );
@@ -79,7 +97,10 @@ export function CardTitle({
 }: HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-base font-semibold tracking-tight text-stone-900 dark:text-white", className)}
+      className={cn(
+        "text-base font-semibold tracking-tight text-white dark:text-stone-900",
+        className
+      )}
       {...props}
     />
   );
@@ -91,7 +112,10 @@ export function CardDescription({
 }: HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-sm leading-relaxed text-stone-600 dark:text-stone-300", className)}
+      className={cn(
+        "text-sm leading-relaxed text-slate-200 dark:text-stone-600",
+        className
+      )}
       {...props}
     />
   );
@@ -110,7 +134,10 @@ export function CardFooter({
 }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex items-center border-t border-stone-100 p-5 pt-4 dark:border-white/5", className)}
+      className={cn(
+        "flex items-center border-t border-stone-100 p-5 pt-4 dark:border-white/5",
+        className
+      )}
       {...props}
     />
   );

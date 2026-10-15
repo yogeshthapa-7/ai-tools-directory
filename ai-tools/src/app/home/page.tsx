@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { TOOLS, CATEGORIES } from "@/lib/data";
 import { FadeIn } from "@/components/shared/fade-in";
 import { SnapHeading } from "@/components/shared/snap-heading";
@@ -83,26 +84,10 @@ export default function HomePage() {
               — just better AI discovery.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/directory"
-              className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-            >
-              Browse the directory
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/explore"
-              className="inline-flex items-center gap-2 rounded-md border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
-            >
-              Explore all tools
-            </Link>
-            <Link
-              href="/home/about"
-              className="inline-flex items-center gap-2 rounded-md border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
-            >
-              About the directory
-            </Link>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <PearlButton label="Browse the directory" href="/directory" variant="primary" size="sm" />
+            <PearlButton label="Explore all tools" href="/explore" variant="outline" size="sm" />
+            <PearlButton label="About the directory" href="/home/about" variant="outline" size="sm" />
           </div>        </FadeIn>
 
         {/* Featured tool — floating image with edge fade */}
@@ -168,13 +153,7 @@ export default function HomePage() {
                 Submissions are free and reviewed by a person. If it&apos;s
                 useful and it works, it belongs in the directory.
               </p>
-              <Link
-                href="/submit"
-                className="mt-6 inline-flex items-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-semibold text-stone-900 shadow-lg shadow-stone-950/20 transition-all hover:bg-stone-100 hover:shadow-xl active:scale-[0.98]"
-              >
-                Submit your tool
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+<PearlButton label="Submit your tool" href="/submit" variant="primary" size="sm" className="mt-4" />
             </div>
           </div>
         </section>

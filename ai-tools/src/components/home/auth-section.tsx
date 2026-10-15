@@ -3,6 +3,7 @@
 import { useState, useId, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 function Typewriter({
   text,
@@ -118,42 +119,49 @@ function AuthButton({
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "outline" | "google";
 }) {
-  const baseClasses =
-    "inline-flex h-12 w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-xl text-base font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  if (variant === "google") {
+    return (
+      <button
+        type="button"
+        className={cn(
+          "relative inline-flex h-12 w-full items-center justify-center gap-3 whitespace-nowrap rounded-xl text-base font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-stone-300 bg-white px-4 text-stone-900 shadow-sm shadow-stone-900/5 hover:bg-stone-50 hover:border-stone-400 dark:border-white/15 dark:bg-transparent dark:text-white dark:hover:bg-white/5 dark:hover:border-white/30",
+          className
+        )}
+        {...props}
+      >
+        <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+          />
+        </svg>
+        <span>{children || "Continue with Google"}</span>
+      </button>
+    );
+  }
 
-  const variantStyles: Record<string, React.CSSProperties> = {
-    primary: {
-      backgroundColor: "#1d4ed8",
-      color: "#ffffff",
-      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
-    },
-    google: {
-      backgroundColor: "bg-[#16a34a]",
-      color: "#ffffff",
-      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
-    },
-    outline: {
-      backgroundColor: "transparent",
-      color: "inherit",
-    },
-  };
-
-  const variantClasses = {
-    primary: "hover:bg-blue-800 active:bg-blue-900",
-    google: "hover:bg-green-700 active:bg-green-800",
-    outline:
-      "border border-stone-300 bg-white text-stone-900 shadow-sm shadow-stone-900/5 hover:bg-stone-50 hover:border-stone-400 dark:border-white/15 dark:bg-transparent dark:text-white dark:hover:bg-white/5 dark:hover:border-white/30",
-  };
-
+  // For primary and outline variants, use PearlButton
   return (
-    <button
-      type="button"
-      className={`${baseClasses} ${variantClasses[variant]} ${className || ""}`}
-      style={variantStyles[variant]}
+    <PearlButton 
+      variant={variant as "primary" | "outline"}
+      size="sm"
+      className={className}
       {...props}
     >
       {children}
-    </button>
+    </PearlButton>
   );
 }
 
@@ -169,12 +177,12 @@ function SignInForm() {
             AF
           </span>
         </span>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-stone-900 [text-shadow:0_1px_0_rgba(255,255,255,0.5)] dark:text-white dark:[text-shadow:0_1px_0_rgba(0,0,0,0.3)]">
-          Sign in to your account
-        </h1>
-        <p className="text-balance text-sm text-stone-600 dark:text-stone-300">
-          Enter your email below to sign in
-        </p>
+<h1 className="mt-2 text-2xl font-bold tracking-tight text-stone-900 [text-shadow:0_1px_0_rgba(255,255,255,0.5)] dark:text-white dark:[text-shadow:0_1px_0_rgba(0,0,0,0.3)]">
+           Sign in
+         </h1>
+<p className="text-balance text-sm text-stone-600 dark:text-stone-300">
+           Enter your email below
+         </p>
       </div>
       <div className="grid gap-4">
         <div className="grid gap-2">
@@ -212,9 +220,9 @@ function SignInForm() {
             Forgot password?
           </a>
         </div>
-        <AuthButton type="submit" variant="primary" className="mt-2">
-          Sign In
-        </AuthButton>
+<AuthButton type="submit" variant="primary" className="mt-2">
+           Sign In Now
+         </AuthButton>
       </div>
     </form>
   );
@@ -232,12 +240,12 @@ function SignUpForm() {
             AF
           </span>
         </span>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-stone-900 [text-shadow:0_1px_0_rgba(255,255,255,0.5)] dark:text-white dark:[text-shadow:0_1px_0_rgba(0,0,0,0.3)]">
-          Create an account
-        </h1>
+<h1 className="mt-2 text-2xl font-bold tracking-tight text-stone-900 [text-shadow:0_1px_0_rgba(255,255,255,0.5)] dark:text-white dark:[text-shadow:0_1px_0_rgba(0,0,0,0.3)]">
+           Create Account
+         </h1>
         <p className="text-balance text-sm text-stone-600 dark:text-stone-300">
-          Enter your details below to sign up
-        </p>
+           Enter your details below
+         </p>
       </div>
       <div className="grid gap-4">
         <div className="grid gap-1">
@@ -289,9 +297,9 @@ function SignUpForm() {
             </a>
           </span>
         </label>
-        <AuthButton type="submit" variant="primary" className="mt-2">
-          Create Account
-        </AuthButton>
+<AuthButton type="submit" variant="primary" className="mt-2">
+           Create Account Now
+         </AuthButton>
       </div>
     </form>
   );
@@ -323,11 +331,6 @@ function AuthFormContainer({
         </span>
       </div>
       <AuthButton type="button" onClick={() => {}} variant="google">
-        <img
-          src="/images/google.png"
-          alt="Google logo"
-          className="h-6 w-13 object-contain"
-        />
         Continue with Google
       </AuthButton>
     </div>

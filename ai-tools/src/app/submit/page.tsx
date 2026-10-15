@@ -15,6 +15,7 @@ import {
   ArrowRight,
   TrendingUp
 } from "lucide-react";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 export default function SubmitPage() {
   const [loading, setLoading] = useState(false);
@@ -301,33 +302,27 @@ export default function SubmitPage() {
             {/* Divider */}
             <div className="h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent" />
 
-            {/* Submit Button */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                type="submit"
+{/* Submit Button */}
+            <div className="flex flex-col sm:flex-row gap-2">
+              <PearlButton 
+                label={loading ? "Submitting..." : "Submit Tool"} 
+                type="submit" 
                 disabled={loading}
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-8 py-4 text-base font-black text-white shadow-xl shadow-indigo-500/25 transition-all hover:shadow-2xl hover:shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
+                variant="primary"
+                size="sm"
+                className="w-full sm:w-auto"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  <>
-                    Submit Tool
-                    <ArrowRight className="h-5 w-5" />
-                  </>
-                )}
-              </button>
-
-              <button
-                type="button"
+                {loading && <Loader2 className="h-3 w-3 animate-spin" />}
+                {!loading && <ArrowRight className="h-3 w-3" />}
+              </PearlButton>
+              
+              <PearlButton
+                label="Cancel"
                 onClick={() => router.back()}
-                className="sm:w-auto rounded-xl border-2 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 px-8 py-4 text-base font-bold text-zinc-700 dark:text-zinc-300 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800/70 hover:border-zinc-300 dark:hover:border-zinc-700"
-              >
-                Cancel
-              </button>
+                variant="outline"
+                size="sm"
+                className="w-full sm:w-auto mt-2 sm:mt-0"
+              />
             </div>
           </form>
         </motion.div>

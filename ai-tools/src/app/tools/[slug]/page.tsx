@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { TOOLS } from "@/lib/data";
 import { Card } from "@/components/ui/card";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { cn } from "@/lib/utils";
 
 export default function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -94,50 +95,48 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
             </div>
 
             <div className="flex shrink-0 flex-col gap-2.5 lg:items-end">
-              <a
-                href={tool.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-              >
-                Visit Website
-                <ExternalLink className="h-4 w-4" />
-              </a>
+<PearlButton 
+  label="Visit Website" 
+  href={tool.website} 
+  variant="primary"
+  size="sm"
+/>
               <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setBookmarked((v) => !v)}
-                  aria-pressed={bookmarked}
-                  aria-label={bookmarked ? "Remove bookmark" : "Bookmark"}
-                  className={cn(
-                    "rounded-md border p-2.5 transition-colors",
-                    bookmarked
-                      ? "border-stone-900 text-stone-900 dark:border-white dark:text-white"
-                      : "border-stone-300 text-stone-500 hover:border-stone-400 hover:text-stone-700 dark:border-white/15 dark:text-stone-400 dark:hover:text-stone-200"
-                  )}
-                >
-                  <Bookmark className={cn("h-4 w-4", bookmarked && "fill-current")} />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  aria-label="Share"
-                  className="rounded-md border border-stone-300 p-2.5 text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-700 dark:border-white/15 dark:text-stone-400 dark:hover:text-stone-200"
-                >
-                  <Share2 className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCopyLink}
-                  aria-label="Copy link"
-                  className="rounded-md border border-stone-300 p-2.5 text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-700 dark:border-white/15 dark:text-stone-400 dark:hover:text-stone-200"
-                >
-                  {copied ? (
-                    <Check className="h-4 w-4 text-stone-900 dark:text-white" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </button>
+<PearlButton
+  label={bookmarked ? "Remove bookmark" : "Bookmark"}
+  onClick={() => setBookmarked((v) => !v)}
+  variant="outline"
+  size="xs"
+  className="w-full"
+  aria-pressed={bookmarked}
+  aria-label={bookmarked ? "Remove bookmark" : "Bookmark"}
+>
+  <Bookmark className={cn("h-4 w-4", bookmarked && "fill-current")} />
+</PearlButton>
+<PearlButton
+  label="Share"
+  onClick={handleShare}
+  variant="outline"
+  size="xs"
+  className="w-full"
+  aria-label="Share"
+>
+  <Share2 className="h-4 w-4" />
+</PearlButton>
+<PearlButton
+  label={copied ? "Copied!" : "Copy Link"}
+  onClick={handleCopyLink}
+  variant="outline"
+  size="xs"
+  className="w-full"
+  aria-label="Copy link"
+>
+  {copied ? (
+    <Check className="h-4 w-4 text-stone-900 dark:text-white" />
+  ) : (
+    <Copy className="h-4 w-4" />
+  )}
+</PearlButton>
               </div>
             </div>
           </div>
@@ -271,22 +270,22 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
               <p className="mb-4 text-sm text-stone-600 dark:text-stone-300">
                 Found this useful? Share it with your network.
               </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
-                >
-                  Share
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCopyLink}
-                  className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
-                >
-                  {copied ? "Copied!" : "Copy Link"}
-                </button>
-              </div>
+<div className="flex gap-2 mt-3">
+              <PearlButton
+                label="Share"
+                onClick={handleShare}
+                variant="outline"
+                size="sm"
+                className="flex-1"
+              />
+              <PearlButton
+                label={copied ? "Copied!" : "Copy Link"}
+                onClick={handleCopyLink}
+                variant="outline"
+                size="sm"
+                className="flex-1"
+              />
+            </div>
             </Card>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { Search, X, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } f
 import { FilterSidebar } from "@/components/layout/filter-sidebar";
 import { ToolCard } from "@/components/tool/ToolCard";
 import { Card } from "@/components/ui/card";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { TOOLS, type Pricing } from "@/lib/data";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { SnapHeading } from "@/components/shared/snap-heading";
@@ -158,19 +159,18 @@ export default function DirectoryPage() {
               sponsored rankings, no clutter.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
+              <PearlButton
+                label="Start browsing"
                 href="#tools"
-                className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-              >
-                Start browsing
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
+                variant="primary"
+                size="sm"
+              />
+              <PearlButton
+                label="Submit a tool"
                 href="/submit"
-                className="inline-flex items-center gap-2 rounded-md border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-100 dark:border-white/15 dark:text-stone-200 dark:hover:bg-white/5"
-              >
-                Submit a tool
-              </a>
+                variant="outline"
+                size="sm"
+              />
             </div>
           </div>
 
@@ -203,22 +203,22 @@ export default function DirectoryPage() {
                 Search here
               </h2>
               <div className="relative mt-3">
-                {/* Moving neon glow — appears only while focused */}
-                <div
-                  aria-hidden="true"
-                  className="neon-glow pointer-events-none absolute -inset-[3px] rounded-[10px] bg-[conic-gradient(from_var(--neon-angle),#7dd3fc_0%,#a5b4fc_18%,#e0f2fe_32%,transparent_55%,transparent_100%)] opacity-0 blur-[7px] transition-opacity duration-500 group-focus-within:opacity-90 group-focus-within:animate-neon-angle"
-                />
+{/* Moving neon glow — appears only while focused */}
+        <div
+          aria-hidden="true"
+          className="neon-glow pointer-events-none absolute -inset-[3px] rounded-[10px] bg-[conic-gradient(from_var(--neon-angle),#7dd3fc_0%,#a5b4fc_18%,#e0f2fe_32%,transparent_55%,transparent_100%)] opacity-0 blur-[5px] transition-opacity duration-500 group-focus-within:opacity-70 group-focus-within:animate-neon-angle"
+        />
                 {/* 3D field */}
                 <div className="relative rounded-lg bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(28,25,23,0.06),0_4px_10px_-4px_rgba(28,25,23,0.10)] transition-all duration-300 group-focus-within:shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_2px_4px_rgba(28,25,23,0.08),0_10px_24px_-8px_rgba(56,189,248,0.45)] dark:bg-stone-900 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_1px_2px_rgba(0,0,0,0.4)] dark:group-focus-within:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_-8px_rgba(125,211,252,0.35)]">
                   <Search className="pointer-events-none rounded absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 transition-colors duration-300 group-focus-within:text-stone-600 dark:group-focus-within:text-stone-300" />
-                  <input
-                    type="search"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search tools, categories, or tags"
-                    aria-label="Search tools"
-                    className="h-11 w-full rounded-md border border-stone-300 bg-transparent pl-10 pr-10 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition-colors duration-300 focus:border-sky-300/70 dark:border-white/15 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-sky-400/40"
-                  />
+<input
+  type="search"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="Search tools, categories, or tags"
+  aria-label="Search tools"
+  className="h-11 w-full rounded-xl border border-stone-300 bg-transparent pl-10 pr-10 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition-colors duration-300 focus:border-sky-300/70 dark:border-white/15 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-sky-400/40"
+/>
                   {search && (
                     <button
                       type="button"
@@ -336,14 +336,7 @@ export default function DirectoryPage() {
                   Nothing matches your current search and filters. Try
                   different terms or clear them.
                 </p>
-                <button
-                  type="button"
-                  onClick={clearAll}
-                  className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
-                >
-                  Clear all filters
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+<PearlButton label="Clear all filters" onClick={clearAll} variant="outline" size="sm" className="mt-2" />
               </div>
           )}
         </section>

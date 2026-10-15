@@ -151,6 +151,28 @@ html.no-scroll body {
   will-change: transform;
 }
 
+@keyframes neon-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-neon-shift {
+  background-size: 200% 100%;
+  animation: neon-shift 4s ease-in-out infinite;
+}
+
+/* Even simpler animation for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-neon-shift {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
 .animate-scroll-x:hover {
   animation-play-state: paused;
 }
@@ -197,6 +219,53 @@ html.no-scroll body {
   animation: background-pan 20s ease-in-out infinite;
 }
 
+/* Glass card shine sweep — hover only */
+@keyframes shine-sweep {
+  0% {
+    transform: translateX(-130%) skewX(14deg);
+  }
+  100% {
+    transform: translateX(130%) skewX(14deg);
+  }
+}
+
+.card-shine {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.card-shine::after {
+  content: "";
+  position: absolute;
+  top: -15%;
+  left: -15%;
+  width: 35%;
+  height: 240%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-130%) skewX(14deg);
+  will-change: transform;
+}
+
+.card-shine:hover::after {
+  animation: shine-sweep 0.7s cubic-bezier(0.2, 0.7, 0.1, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-shine:hover::after {
+    animation: none;
+    transform: translateX(-130%) skewX(14deg);
+  }
+}
+
 /* Neon glow around the directory search bar */
 @property --neon-angle {
   syntax: "<angle>";
@@ -210,8 +279,22 @@ html.no-scroll body {
   }
 }
 
+@keyframes neon-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 .animate-neon-angle {
   animation: neon-angle 3s linear infinite;
+}
+
+.animate-neon-shift {
+  background-size: 200% 100%;
+  animation: neon-shift 3s ease-in-out infinite;
 }
 
 @supports not (background: conic-gradient(from 0deg, red, blue)) {
@@ -327,7 +410,9 @@ html.no-scroll body {
   .animate-background-pan,
   .animate-curtain-cover,
   .animate-curtain-reveal,
-  .animate-fade-in-top {
+  .animate-fade-in-top,
+  .animate-neon-angle,
+  .animate-neon-shift {
     animation: none;
   }
 }

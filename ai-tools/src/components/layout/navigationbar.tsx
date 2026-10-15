@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Search, Bookmark, Plus, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 const NAV = [
   { href: "/home", label: "Home" },
@@ -61,14 +62,14 @@ export function NavigationBar() {
           <div className="ml-auto flex items-center gap-2">
             <div className="relative hidden sm:block">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search tools"
-                aria-label="Search tools"
-                className="h-9 w-56 rounded-md border border-stone-200 bg-stone-50/80 pl-9 pr-3 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition-colors focus:border-stone-400 focus:bg-white dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-white/30 dark:focus:bg-black/20"
-              />
+<input
+  type="search"
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  placeholder="Search tools"
+  aria-label="Search tools"
+  className="h-9 w-56 rounded-xl border border-stone-200 bg-stone-50/80 pl-9 pr-3 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition-colors focus:border-stone-400 focus:bg-white dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-white/30 dark:focus:bg-black/20"
+/>
             </div>
 
             <Link
@@ -84,12 +85,7 @@ export function NavigationBar() {
               )}
             </Link>
 
-            <Link
-              href="/submit"
-              className="hidden rounded-md bg-stone-900 px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-stone-700 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 sm:inline-flex"
-            >
-              Submit tool
-            </Link>
+<PearlButton label="Submit tool" href="/submit" variant="primary" size="xs" className="hidden sm:inline-flex" />
 
             <button
               type="button"
@@ -113,14 +109,14 @@ export function NavigationBar() {
           <div className="absolute inset-x-3 top-[4.5rem] rounded-lg border border-stone-200 bg-white p-3 shadow-lg dark:border-white/10 dark:bg-stone-950">
             <div className="relative mb-3 sm:hidden">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search tools"
-                aria-label="Search tools"
-                className="h-9 w-full rounded-md border border-stone-200 bg-stone-50/80 pl-9 pr-3 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-stone-400 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-white/30"
-              />
+<input
+  type="search"
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  placeholder="Search tools"
+  aria-label="Search tools"
+  className="h-9 w-full rounded-xl border border-stone-200 bg-stone-50/80 pl-9 pr-3 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-stone-400 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-stone-500 dark:focus:border-white/30"
+/>
             </div>
             <nav className="flex flex-col gap-0.5" aria-label="Mobile">
               {NAV.map((item) => {
