@@ -1,14 +1,14 @@
 "use client";
 
 import { useId } from "react";
-import { LayoutGrid, List } from "lucide-react";
+import { LayoutGrid, List, Table } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type ViewMode = "list" | "grid";
+export type ViewMode = "grid" | "table";
 
-const OPTIONS: { value: ViewMode; label: string; icon: typeof List }[] = [
-  { value: "list", label: "List", icon: List },
+const OPTIONS: { value: ViewMode; label: string; icon: typeof LayoutGrid }[] = [
   { value: "grid", label: "Grid", icon: LayoutGrid },
+  { value: "table", label: "Table", icon: Table },
 ];
 
 export function ViewToggle({

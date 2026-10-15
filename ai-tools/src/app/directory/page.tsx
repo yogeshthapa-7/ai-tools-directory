@@ -1,19 +1,170 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Image from "next/image";
-import { Search, X, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Search, X, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight, Bookmark, ExternalLink, Star } from "lucide-react";
 import { FilterSidebar } from "@/components/layout/filter-sidebar";
 import { ToolCard } from "@/components/tool/ToolCard";
 import { Card } from "@/components/ui/card";
 import { PearlButton } from "@/components/ui/pearl-button";
-import { TOOLS, type Pricing } from "@/lib/data";
+import { TOOLS, type Pricing, type Tool } from "@/lib/data";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { SnapHeading } from "@/components/shared/snap-heading";
 import { ViewToggle, type ViewMode } from "@/components/ui/view-toggle";
 import { cn } from "@/lib/utils";
 
 const TOOLS_PER_PAGE = 12;
+
+function PricingBadge({ pricing }: { pricing: Pricing }) {
+  const variants = {
+    free: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
+    freemium: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+    paid: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300",
+  };
+  return (
+    <span className={cn("rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide", variants[pricing])}>
+      {pricing}
+    </span>
+  );
+}
+
+function CategoryTags({ categories }: { categories: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {categories.slice(0, 3).map((c) => (
+        <span key={c} className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300">
+          {c}
+        </span>
+      ))}
+      {categories.length > 3 && (
+        <span className="rounded-sm bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-500 dark:bg-stone-800 dark:text-stone-400">
+          +{categories.length - 3}
+        </span>
+      )}
+    </div>
+  );
+}
+
+type ToolRowProps = {
+  tool: Tool;
+  isBookmarked: boolean;
+  onToggleBookmark: (id: string) => void;
+};
+
+const ToolRow = React.memo(({ tool, isBookmarked, onToggleBookmark }: ToolRowProps) => {
+  return (
+    <tr className="group transition-colors hover:bg-stone-50/50 dark:hover:bg-white/5">
+      <td className="px-4 py-4">
+        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg ring-1 ring-stone-900/5 transition-transform duration-300 group-hover:scale-105 dark:ring-white/10">
+          <Link
+            href={`/tools/${tool.slug}`}
+            className="absolute inset-0 z-10"
+            aria-label={`View details for ${tool.name}`}
+          />
+          <Image
+            src={tool.image}
+            alt={tool.name}
+            fill
+            sizes="40px"
+            className="object-cover"
+          />
+        </div>
+      </td>
+      <td className="px-4 py-4">
+          <div className="flex items-center gap-2 group">
+            <h3 className="font-semibold tracking-tight text-stone-900 transition-colors group-hover:text-sky-500 dark:text-white dark:group-hover:text-sky-400 cursor-pointer">
+              {tool.name}
+            </h3>
+            {tool.featured && (
+              <span className="inline-flex items-center gap-1 rounded-sm bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                <Star className="h-3 w-3 fill-current" />
+                Featured
+              </span>
+            )}
+          </div>
+        </td>
+      <td className="px-4 py-4 max-w-md hidden md:table-cell">
+        <p className="text-sm leading-relaxed text-stone-600 line-clamp-2 dark:text-stone-300">
+          {tool.shortDescription}
+        </p>
+      </td>
+      <td className="px-4 py-4 hidden lg:table-cell">
+        <CategoryTags categories={tool.categories} />
+      </td>
+      <td className="px-4 py-4">
+        <PricingBadge pricing={tool.pricing} />
+      </td>
+      <td className="px-4 py-4">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleBookmark(tool.id);
+            }}
+            className={cn(
+              "rounded-md p-2 transition-colors",
+              isBookmarked
+                ? "text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/20"
+                : "text-stone-400 hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-white/10 dark:hover:text-stone-300"
+            )}
+            aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
+            aria-pressed={isBookmarked}
+          >
+            <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
+          </button>
+          <a
+            href={tool.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="rounded-md p-2 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-white/10 dark:hover:text-stone-300"
+            aria-label={`Visit ${tool.name} website`}
+          >
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
+      </td>
+    </tr>
+  );
+});
+
+type TableViewProps = {
+  tools: Tool[];
+  bookmarkedSet: Set<string>;
+  onToggleBookmark: (id: string) => void;
+};
+
+const TableView = React.memo(({ tools, bookmarkedSet, onToggleBookmark }: TableViewProps) => {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-stone-200/80 bg-white/60 backdrop-blur-md dark:border-white/10 dark:bg-stone-950/60">
+      <table className="w-full text-left" role="table">
+        <thead>
+          <tr className="border-b border-stone-200/80 bg-stone-50/50 dark:border-white/10 dark:bg-stone-900/50">
+            <th className="w-16 px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400">Logo</th>
+            <th className="min-w-[200px] px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400">Tool</th>
+            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400 hidden md:table-cell">Description</th>
+            <th className="w-[200px] px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400 hidden lg:table-cell">Categories</th>
+            <th className="w-28 px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400">Pricing</th>
+            <th className="w-32 px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-stone-200/60 dark:divide-white/10">
+          {tools.map((tool) => (
+            <ToolRow
+              key={tool.id}
+              tool={tool}
+              isBookmarked={bookmarkedSet.has(tool.id)}
+              onToggleBookmark={onToggleBookmark}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+});
 
 export default function DirectoryPage() {
   const [search, setSearch] = useState("");
@@ -22,7 +173,7 @@ export default function DirectoryPage() {
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>("bookmarks", []);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -32,11 +183,13 @@ export default function DirectoryPage() {
     };
   }, []);
 
-  const toggleBookmark = (id: string) => {
+  const toggleBookmark = useCallback((id: string) => {
     setBookmarks((prev) =>
       prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]
     );
-  };
+  }, [setBookmarks]);
+
+  const bookmarkedSet = useMemo(() => new Set(bookmarks), [bookmarks]);
 
   const filteredTools = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -260,22 +413,30 @@ export default function DirectoryPage() {
 
           {filteredTools.length > 0 ? (
             <>
-              <div
-                className={cn(
-                  viewMode === "grid"
-                    ? "grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3"
-                    : "flex flex-col gap-3"
-                )}
-              >
-                {paginatedTools.map((tool) => (
-                  <ToolCard
-                    key={tool.id}
-                    tool={tool}
-                    bookmarked={bookmarks.includes(tool.id)}
-                    onToggleBookmark={toggleBookmark}
-                  />
-                ))}
-              </div>
+              {viewMode === "table" ? (
+                <TableView
+                  tools={paginatedTools}
+                  bookmarkedSet={bookmarkedSet}
+                  onToggleBookmark={toggleBookmark}
+                />
+              ) : (
+                <div
+                  className={cn(
+                    viewMode === "grid"
+                      ? "grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3"
+                      : "flex flex-col gap-3"
+                  )}
+                >
+                  {paginatedTools.map((tool) => (
+                    <ToolCard
+                      key={tool.id}
+                      tool={tool}
+                      bookmarked={bookmarks.includes(tool.id)}
+                      onToggleBookmark={toggleBookmark}
+                    />
+                  ))}
+                </div>
+              )}
 
               {totalPages > 1 && (
                 <nav
